@@ -5,6 +5,29 @@ public class User {
     private String name;
     //private Integer age;
     private String email;
+    private String number;
+    private String zip;
+
+    public User()
+    {
+
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
 
     private int roleCode;
 

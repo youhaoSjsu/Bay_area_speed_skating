@@ -35,16 +35,17 @@
 
 
         .div-height{border:0px solid #F00; width:70px; height:60px; margin-left: 10px}
-        .button-style{border: 1px solid #0000ff; width:70px; height:50px; color:#0000ff;}
-        .image-style{border: 0px solid #0000ff; width:70px; height:50px; background:#ffffff;}
+        .button-style{border: 1px solid #0000ff; width:70px; height:50px; }
+        .image-style{border: 0px solid #0000ff; width:70px; height:50px; background:#FFFFFF;}
     </style>
 </head>
 <body>
-<H2>student main page</H2>
+<H2>student drop page</H2>
 <form th:action="student_main.html" th:object="${aUser}">
 
     <h4 th:text = "${aUser.name}"></h4>
 </form>
+
 
 
 <div ng-app="myApp" ng-controller="myCtrl" align="top">
@@ -52,7 +53,7 @@
 
     <div ng-click="marketClick()" ng-app="myApp"  class="div-height", align="center">
 
-<!--        <img class="image-style" th:src = "@{/api/getStuImage}" />-->
+        <!--        <img class="image-style" th:src = "@{/api/getStuImage}" />-->
         <img class="image-style" src = "/pics/Main.png" />
         <p class="p-style" >{{kkll}}</p>
     </div>
@@ -85,20 +86,20 @@
         <p class="p-style">seting Option</p>
     </div>
 
-<!--    <div  class = "search-height">-->
-<!--        <form th:action="search" method="post" th:object = ${prod}>-->
-<!--            <tr> search:-->
-<!--                <p>item:-->
-<!--                    <input class="search-in" type="search" name="name" id="" value="" />-->
-<!--                </p>-->
-<!--                <p>location:-->
-<!--                    <input class="search-in" type="search" name="location" id="" value="" />-->
-<!--                </p>-->
-<!--            </tr>-->
-<!--            <input type="submit" value="Submit"/>-->
+    <!--    <div  class = "search-height">-->
+    <!--        <form th:action="search" method="post" th:object = ${prod}>-->
+    <!--            <tr> search:-->
+    <!--                <p>item:-->
+    <!--                    <input class="search-in" type="search" name="name" id="" value="" />-->
+    <!--                </p>-->
+    <!--                <p>location:-->
+    <!--                    <input class="search-in" type="search" name="location" id="" value="" />-->
+    <!--                </p>-->
+    <!--            </tr>-->
+    <!--            <input type="submit" value="Submit"/>-->
 
-<!--        </form>-->
-<!--    </div>-->
+    <!--        </form>-->
+    <!--    </div>-->
 
 
 
@@ -152,42 +153,47 @@
         }
 
 
+
     });
 
 </script>
 
 
-<!--<div id="grid_div" class="grid_div">-->
-<!--    <p>You have this</p>-->
-<!--    -->
-<!--    <li class = "li_style" th:each="class : ${cl}">-->
-<!--&lt;!&ndash;        <div class="good_img">&ndash;&gt;-->
-<!--&lt;!&ndash;            <img class="good_img" th:src="${class?.image}" />&ndash;&gt;-->
-<!--&lt;!&ndash;        </div>&ndash;&gt;-->
-<!--        <p >-->
-<!--            <label style="font-size: 20px; float: left; margin-top: 0px;color: #0000FF;" th:text="${pd.name}"></label>-->
-<!--            <label style="float: right" th:text="${pd.location}"> </label><br>-->
-<!--        </p>-->
+<form th:object = "${selectIds}" method="post" th:action="dropExcute">
+    <div class="grid_div" th:object = "${dates}">
+        <table border="1"  id="hidden-table-info">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>location</th>
+                <th>price</th>
+                <th>time</th>
+                <th>teacher</th>
+                <th> drop</th>
 
-<!--        <p>-->
-<!--            Price:-->
-<!--            <label style="font-size: 15px;  color: #0000FF;" th:text="${pd.price}"></label><br>-->
-<!--        </p>-->
-<!--        <p>-->
-<!--            Describe:-->
-<!--            <label style="font-size: 15px;  color: #0000FF;" th:text="${pd.intro}"></label>-->
-<!--        </p>-->
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="li_style" th:each="class : ${classList}">
+                <td th:text="${class.c_id}"></td>
+                <td th:text="${class.name}"></td>
+                <td th:text="${class.location}"></td>
+                <td th:text="${class.price}"></td>
+                <td th:text="${class.sTime}"></td>
+                <td th:text="${class.instructor}"></td>
+                <td><input type="checkbox" name = "selectIds" th:value="${class.c_id}"/></td>
+                <td><input width="200px" type="search" name="dates" value="null" /> <label >YYYY-MM-DD</label></td>
 
+            </tr>
+            </tbody>
+        </table>
+        <input width="500px" height="200px" type="search" name="comment" value="text comment"/>
+        <br><br><input type="submit" value="Submit the selections and comment" />
 
-<!--    </li>-->
-
-<!--    &lt;!&ndash;this is a test p, please delete it befor submit&ndash;&gt;-->
-<!--    <p th:text="${prod.name}"></p>-->
-
-
-
-</div>
-
-
+        <h4>reminder:</h4>
+        <p th:text="${reminder}"></p>
+    </div>
+</form>
 </body>
 </html>

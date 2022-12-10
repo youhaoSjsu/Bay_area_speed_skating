@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!--this page need a user, a courseList of all classes  -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,7 +19,7 @@
         }
         .grid_div
         {
-            margin-top:50px;width: 100%; height: 100%;background: #FAEBD7;
+            margin-top:50px;width: 100%; height: 500px;background: #FAEBD7;
         }
         .li_style
         {
@@ -35,13 +34,13 @@
         .search-height{margin-left: 40px;border:0px solid #F00; margin-top: -20px; width:250px; height:60px; }
 
 
-        .div-height{border:0px solid #F00; width:70px; height:60px; margin-left: 10px}
-        .button-style{border: 1px solid #0000ff; width:70px; height:50px; }
-        .image-style{border: 0px solid #0000ff; width:70px; height:50px; background:#FFFFFF;}
+        .div-height{border:0px solid #F00; width:70px; height:60px}
+        .button-style{border: 1px solid #0000ff; width:70px; height:50px; color:#0000ff;}
+        .image-style{border: 0px solid #0000ff; width:70px; height:50px; background:#0000ff;}
     </style>
 </head>
 <body>
-<H2>student register page</H2>
+<H2>admin main page</H2>
 <form th:action="student_main.html" th:object="${aUser}">
 
     <h4 th:text = "${aUser.name}"></h4>
@@ -54,36 +53,35 @@
 
     <div ng-click="marketClick()" ng-app="myApp"  class="div-height", align="center">
 
-        <!--        <img class="image-style" th:src = "@{/api/getStuImage}" />-->
-        <img class="image-style" src = "/pics/Main.png" />
+        <img class="image-style" th:src = "@{/api/getStuImage}" />
         <p class="p-style" >{{kkll}}</p>
     </div>
 
     <div ng-click="addClassClick()" class="div-height", align="center" >
-        <img class="image-style" src="/pics/add.png" />
+        <img class="image-style", />
         <p class="p-style">add class</p>
     </div>
 
-    <div  ng-click="financialClick()" class="div-height", align="center" >
-        <img class="image-style" src="/pics/Dollar-circle-fill.png" />
-        <p class="p-style">finance</p>
+    <div  ng-click="registrations()" class="div-height", align="center" >
+        <img class="image-style", />
+        <p class="p-style">registration handler</p>
     </div>
     <div ng-click="vacateClick()" class="div-height", align="center" >
-        <img  class="image-style" src="/pics/absent.png" />
-        <p class="p-style">ask absent</p>
+        <img  class="image-style", />
+        <p class="p-style">absent handler</p>
     </div>
     <div ng-click="dropClick()" class="div-height", align="center" >
-        <img  class="image-style" src="/pics/drop.png" />
+        <img  class="image-style", />
         <p class="p-style">drop</p>
     </div>
 
-    <div ng-click="makeup()" class="div-height", align="center" >
-        <img  class="image-style", src="/pics/return.png"/>
-        <p class="p-style">makeUp class</p>
+    <div ng-click="statisClicker()" class="div-height", align="center" >
+        <img  class="image-style", />
+        <p class="p-style">statistic tools</p>
     </div>
 
-    <div ng-click="mpClicker()" class="div-height", align="center" >
-        <img  class="image-style" src="/pics/setting.png" />
+    <div ng-click="settingClicker()" class="div-height", align="center" >
+        <img  class="image-style", />
         <p class="p-style">seting Option</p>
     </div>
 
@@ -126,31 +124,31 @@
         $scope.marketClick = function ()
         {
             alert('ok');
-            $window.location.href = $location.url() + "stMain";
+            $window.location.href = $location.url() + "adminMain";
         };
-        $scope.financialClick = function ()
+        $scope.registrations = function ()
         {
-            $window.location.href = $location.url() + "finance";
+            $window.location.href = $location.url() + "registrations";
         };
         $scope.dropClick = function ()
         {
-            $window.location.href = $location.url() + "drop";
+            $window.location.href = $location.url() + "dropHandler";
         }
         $scope.vacateClick = function ()
         {
-            $window.location.href = $location.url() + "absent";
+            $window.location.href = $location.url() + "absentHandler";
         }
         $scope.addClassClick = function ()
         {
-            $window.location.href = $location.url() + "addClass";
+            $window.location.href = $location.url() + "createClass";
         }
-        $scope.mpClicker = function ()
+        $scope.statisClicker = function ()
         {
-            $window.location.href = $location.url() + "absentMp";
+            $window.location.href = $location.url() + "adStatic";
         }
-        $scope.makeup = function ()
+        $scope.settingClicker =function ()
         {
-            $window.location.href = $location.url() + "makeUp";
+            $window.location.href = $location.url()+"adSetting"
         }
 
 
@@ -159,41 +157,32 @@
 </script>
 
 
-<form th:object = "${selectIds}" method="post" th:action="registClass">
 <div class="grid_div">
-    <table border="1"  id="hidden-table-info">
-        <thead>
-        <tr>
-            <th>id</th>
-            <th>name</th>
-            <th>location</th>
-            <th>price</th>
-            <th>time</th>
-            <th>teacher</th>
-            <th> register</th>
+<!--    <table border="1"  id="hidden-table-info">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>id</th>-->
+<!--            <th>name</th>-->
+<!--            <th>location</th>-->
+<!--            <th>price</th>-->
+<!--            <th>time</th>-->
+<!--            <th>teacher</th>-->
 
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="li_style" th:each="class : ${classList}">
-            <td th:text="${class.c_id}"></td>
-            <td th:text="${class.name}"></td>
-            <td th:text="${class.location}"></td>
-            <td th:text="${class.price}"></td>
-            <td th:text="${class.sTime}"></td>
-            <td th:text="${class.instructor}"></td>
-            <td><input type="checkbox" name = "selectIds" th:value="${class.c_id}"/></td>
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr class="li_style" th:each="class : ${classList}">-->
+<!--            <td th:text="${class.c_id}"></td>-->
+<!--            <td th:text="${class.name}"></td>-->
+<!--            <td th:text="${class.location}"></td>-->
+<!--            <td th:text="${class.price}"></td>-->
+<!--            <td th:text="${class.sTime}"></td>-->
+<!--            <td th:text="${class.instructor}"></td>-->
 
-        </tr>
-        </tbody>
-    </table>
-    <input width="500px" height="200px" type="search" name="comment" value="text comment"/>
-    <br><br><input type="submit" value="Submit the selections and comment" />
-
-    <h5>reminder:</h5>
-    <p th:text="${reminder}"></p>
-
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
 </div>
-</form>
+
 </body>
 </html>

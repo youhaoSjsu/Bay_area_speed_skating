@@ -4,13 +4,58 @@ import java.sql.Time;
 import java.time.DayOfWeek;
 
 public class Course {
-    private int c_id;
+    protected int c_id;
+    public int maxStudent;
+    public int enrollment;
     private String location;
+
+    public String eTime;
+
+    public String time;
     private String name;
     private double price;
 
     private String sTime;
 
+    public int getEnrollment() {
+        return enrollment;
+    }
+
+    public void setEnrollment(int enrollment) {
+        this.enrollment = enrollment;
+    }
+
+    public int getMaxStudent() {
+        return maxStudent;
+    }
+
+    public void setMaxStudent(int maxStudent) {
+        this.maxStudent = maxStudent;
+    }
+
+    public String geteTime() {
+        return eTime;
+    }
+
+    public void seteTime(String eTime) {
+        this.eTime = eTime;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getsTime() {
+        return sTime;
+    }
+
+    public void setsTime(String sTime) {
+        this.sTime = sTime;
+    }
 
     private Time c_time;
     private DayOfWeek c_day;
@@ -40,12 +85,13 @@ public class Course {
         this.c_id = c_id;
     }
 
-    public Course(int c_id, String teacher, String location, String time,String name) {
+    public Course(int c_id, String teacher, String location, String time,String name,double price) {
         this.c_id = c_id;
         this.instructor = teacher;
         this.location = location;
         this.sTime = time;
         this.name = name;
+        this.price = price;
 
     }
 

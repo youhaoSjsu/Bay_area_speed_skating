@@ -1,6 +1,7 @@
 package com.example.student_portal.controller;
 
 
+import com.example.student_portal.module.SqlClass;
 import com.example.student_portal.module.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +34,8 @@ public class mainCont {
     public JdbcTemplate jdbcTemplate;
     protected static User CurrUser;
 
+    protected static User CurrA;
+
     @RequestMapping(value="/signIn",method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView signIn(String username,String password) throws ClassNotFoundException,NullPointerException
@@ -63,12 +66,17 @@ public class mainCont {
             {
                 case 1:
                      mv= new ModelAndView("student_main.html");
+                    CurrUser = aUser;
+                    mv.addObject("aUser",aUser);
                      break;
 
-                case 2:
-                    mv =new ModelAndView("admin_main.html");
-                    break;
                 case 3:
+                    mv =new ModelAndView("admin_main.html");
+                    CurrA = aUser;
+                    mv.addObject("aUser",CurrA);
+
+                    break;
+                case 2:
                     mv = new ModelAndView("instor_main.html");
                     break;
                 default:
@@ -76,8 +84,7 @@ public class mainCont {
             }
 
             assert mv != null;
-            CurrUser = aUser;
-            mv.addObject("aUser",aUser);
+
             return mv;
 
 
@@ -86,14 +93,48 @@ public class mainCont {
         }
 
 
-        return new ModelAndView();
+        return new ModelAndView("signIn.html");
 
 
     }
 
+    @RequestMapping(value="/index",method = RequestMethod.GET)
+    public ModelAndView mainPage()
+    {
+        ModelAndView mv  =new ModelAndView("index.html");
+        return mv;
+    }
+    @RequestMapping(value="/signUp",method = RequestMethod.GET)
+    public ModelAndView signUp()
+    {
+        ModelAndView mv = new ModelAndView("signUp.html");
+        return mv;
+    }
+    @RequestMapping(value="/signUpCheck",method = RequestMethod.GET)
+    public ModelAndView signUpCheck(String username, String number, String password, String zip, String email, String repeat)
+    {
+        SqlClass sqlClass = new SqlClass(jdbcTemplate);
+        ModelAndView mv = new ModelAndView("signUp.html");
+        String reminder = "error";
+        if(!password.equals(repeat))
+        {
+            reminder = "password error";
+            mv.addObject("reminder",reminder);
+            return mv;
+        }
+        else if(!sqlClass.invalidName(username)){
 
+            reminder = "used username error please try with other names";
+            mv.addObject("reminder",reminder);
+            return mv;
+        } else {
+            sqlClass.newUsers(username,number,email,zip,password);
+            reminder ="success";
+            mv.addObject("reminder",reminder);
+            return mv;
 
-
+        }
+    }
 
 //    public Map<String,File> loadFile(int role)
 //    {
@@ -106,7 +147,7 @@ public void getStuImage(HttpServletRequest request, HttpServletResponse response
     //method of get a static image
         response.setContentType("image/png");
     ClassPathResource resource = new ClassPathResource("pics/s_test.png", this.getClass().getClassLoader());
-//    File file = new File("s_test.png");
+    //File file = new File("s_test.png");
     File file = resource.getFile();
     InputStream in;
     try {
@@ -128,22 +169,22 @@ public void getStuImage(HttpServletRequest request, HttpServletResponse response
 
 
 
-    @RequestMapping(value = "/index",method = RequestMethod.GET)
-    @ResponseBody
-    public ModelAndView index() throws ClassNotFoundException
-    {
-
-        int test = 0;
-
-        if(test == 0)
-        {
-            //return signIn("null","null");
-        }
-
-        return new ModelAndView();
-
-
-    }
+//    @RequestMapping(value = "/index",method = RequestMethod.GET)
+//    @ResponseBody
+//    public ModelAndView index() throws ClassNotFoundException
+//    {
+//
+//        int test = 0;
+//
+//        if(test == 0)
+//        {
+//            //return signIn("null","null");
+//        }
+//
+//        return new ModelAndView();
+//
+//
+//    }
 
 
 
@@ -156,6 +197,7 @@ public void getStuImage(HttpServletRequest request, HttpServletResponse response
         Map<String ,Object>item = l.get(0);
         return l;
     }
+
 
 
 

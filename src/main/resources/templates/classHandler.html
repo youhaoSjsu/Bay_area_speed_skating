@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:object = "${selectIds}" method="post" th:action="absentExcute">
+  <div class="grid_div" th:object = "${dates}">
+    <table border="1"  id="hidden-table-info">
+      <thead>
+      <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>location</th>
+        <th>price</th>
+        <th>time</th>
+        <th>teacher</th>
+        <th> absent</th>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="li_style" th:each="class : ${classList}">
+        <td th:text="${class.c_id}"></td>
+        <td th:text="${class.name}"></td>
+        <td th:text="${class.location}"></td>
+        <td th:text="${class.price}"></td>
+        <td th:text="${class.sTime}"></td>
+        <td th:text="${class.instructor}"></td>
+        <td><input type="checkbox" name = "selectIds" value="999999" th:value="${class.c_id}"/></td>
+        <td><input width="200px" type="search" name="dates" value="null" /> <label >YYYY-MM-DD</label></td>
+
+      </tr>
+      </tbody>
+    </table>
+    <input width="500px" height="200px" type="search" name="comment" value="text comment"/>
+    <br><br><input type="submit" value="Submit the selections and comment" />
+
+    <h4>reminder:</h4>
+    <p th:text="${reminder}"></p>
+  </div>
+</form>
+
+</body>
+</html>
