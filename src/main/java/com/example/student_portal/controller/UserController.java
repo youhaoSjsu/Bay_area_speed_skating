@@ -103,7 +103,7 @@ public class UserController extends mainCont {
     public List<Course> loadClass(int schoolCode)
     {
        // Set<Course> sc = new LinkedHashSet<Course>();
-        String sqlLoad = "select class_id, location,classes.time,classes.price,classes.startDate, classes.classCount, classes.class_name,users.username from classes join student_portal.is using (class_id) join student_portal.catalogue_courses using(course_abbreviation) join teach using(class_id) join users using(user_id) order by location;";
+        String sqlLoad = " select class_id, location,classes.time,classes.price,classes.startDate, classes.classCount, classes.class_name,teacher from classes  order by class_id;";
         //String sqlLoad = "select classes.class_id, catalogue_courses.course_abbreviation from classes join student_portal.is using(class_id) join catalogue_courses using(course_abbreviation)";
         List<Map<String,Object>> l = new ArrayList<Map<String,Object>>();
         Map<String,Object> courseMap =new HashMap<String,Object>();
@@ -111,7 +111,7 @@ public class UserController extends mainCont {
         List<Course> courseList = new ArrayList<Course>();
         for(Map<String,Object> m : l) {
 
-            Course aCourse = new Course((Integer) m.get("class_id"), (String) m.get("username"), (String) m.get("location"), (String) m.get("time"), (String) m.get("class_name"), (Double) m.get("price"));
+            Course aCourse = new Course((Integer) m.get("class_id"), (String) m.get("teacher"), (String) m.get("location"), (String) m.get("time"), (String) m.get("class_name"), (Double) m.get("price"));
 
             aCourse.setNc((Integer) m.get("classCount"));
             if(m.get("startDate")!= null)

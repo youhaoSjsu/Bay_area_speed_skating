@@ -26,9 +26,9 @@ public class SqlClass {
     public List<Map<String,Object>> loadClass(int schoolCode)
     {
         Set<Course> sc = new LinkedHashSet<Course>();
-        String sqlLoad = "select class_id, location,classes.time, classes.enrollment,classes.price,classes.startDate, classes.endDate,classes.classCount,course_name,users.username " +
-                "from classes join student_portal.is using (class_id) join student_portal.catalogue_courses using(course_abbreviation) join teach using(class_id) " +
-                "join users using(user_id) order by location;";
+        String sqlLoad = "select class_id, location,classes.time, classes.enrollment,classes.price,classes.startDate, classes.endDate,classes.classCount,class_name,teacher " +
+                "from classes  " +
+                "order by class_id;";
 
         //String sqlLoad = "select classes.class_id, catalogue_courses.course_abbreviation from classes join student_portal.is using(class_id) join catalogue_courses using(course_abbreviation)";
         List<Map<String,Object>> l = new ArrayList<Map<String,Object>>();
@@ -46,7 +46,7 @@ public class SqlClass {
         {
             Course c = new Course();
             c.setC_id((Integer)m.get("class_id"));
-            c.setName(m.get("course_name").toString());
+            c.setName(m.get("class_name").toString());
             c.setLocation(m.get("location").toString());
             c.setPrice((double)m.get("price"));
             c.setTime(m.get("time").toString());
@@ -55,7 +55,7 @@ public class SqlClass {
             }
             c.setEnrollment((Integer) m.get("enrollment"));
 
-            c.setInstructor(m.get("username").toString());
+            c.setInstructor(m.get("teacher").toString());
             lc.add(c);
 
         }
@@ -110,9 +110,9 @@ public class SqlClass {
 //                    "join student_portal.is using(class_id) join catalogue_courses using (course_abbreviation) join register using(class_id) where user_id = " +
 //                    id +
 //                    ";";
-            sql = "select class_id, location, classes.time,classes.startDate,classes.endDate, classes.classCount,classes.price, course_name, classes.class_name, users.username " +
-                    "from classes join student_portal.is using(class_id) join catalogue_courses using (course_abbreviation) " +
-                    "join teach using(class_id) join users using(user_id) join register using(class_id) where register.user_id = " +
+            sql = "select class_id, location, classes.time,classes.startDate,classes.endDate, classes.classCount,classes.price, classes.class_name, teacher " +
+                    "from classes join  " +
+                    "register using(class_id) where register.user_id = " +
                     id +
                     ";";
             l = jdbcTemplate.queryForList(sql);
@@ -136,7 +136,7 @@ public class SqlClass {
             {
                 m.replace("price",0.0);
             }
-            Course aCourse = new Course((Integer) m.get("class_id"),(String) m.get("username"),(String) m.get("location"),(String) m.get("time"),(String) m.get("class_name"),(Double)m.get("price"));
+            Course aCourse = new Course((Integer) m.get("class_id"),(String) m.get("teacher"),(String) m.get("location"),(String) m.get("time"),(String) m.get("class_name"),(Double)m.get("price"));
             aCourse.setNc((Integer) m.get("classCount"));
             if(m.get("startDate")!= null)
             {
@@ -254,8 +254,8 @@ public class SqlClass {
         course.setC_id(id);
         int result= 0;
         String s = ",\""+course.getName()+"\",\""+course.getLocation() + "\",\"" + course.getTime() + "\"," + course.getPrice() + "," + course.getNc() + ",\"" + course.getsTime() + "\",\"" + course.geteTime() + "\");";
-        String sql ="Insert Into classes (class_id,enrollment, capacity,class_name,location,time, price, classCount,startDate,endDate) values " +
-                "("+Integer.toString(course.c_id)+","+Integer.toString(0)+","+Integer.toString(course.getMaxStudent())+s;
+        String sql ="Insert Into classes (class_id,teacher,enrollment, capacity,class_name,location,time, price, classCount,startDate,endDate) values " +
+                "("+Integer.toString(course.c_id)+","+"'"+course.getInstructor()+"',"+Integer.toString(0)+","+Integer.toString(course.getMaxStudent())+s;
 
         result=jdbcTemplate.update(sql);
 
