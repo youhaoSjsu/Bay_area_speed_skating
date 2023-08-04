@@ -5,6 +5,13 @@
     <title>Title</title>
 </head>
 <body>
+<div style="height: 100px">
+    <form th:action="student_main.html" th:object="${aUser}">
+
+        <h4>Current User</h4>
+        <h4 th:text = "${aUser.name}"></h4>
+    </form>
+</div>
 <form th:action="newClassFeedback" th:userDto="${Course}">
 <h1>New class form</h1>
     <p>name</p>
@@ -35,6 +42,11 @@
     <p>instructor</p>
     <input name="endDate" th:field="*{Course.instructor}" class="detail"/>
 
+    <p>Description</p>
+    <input name="description" th:field="*{Course.description}" class="detail"/>
+
+    <p>Mode</p>
+    <input name="description" th:field="*{Course.mode}" class="detail"/>
 
     <br></br>
     <br>

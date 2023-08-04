@@ -6,6 +6,14 @@
 </head>
 <body>
 <div class="grid_div" >
+  <div style="height: 100px">
+    <form th:action="student_main.html" th:object="${aUser}">
+
+      <h4>Current User</h4>
+      <h4 th:text = "${aUser.name}"></h4>
+    </form>
+  </div>
+
   <table border="1"  id="hidden-table-info">
     <thead>
     <tr>

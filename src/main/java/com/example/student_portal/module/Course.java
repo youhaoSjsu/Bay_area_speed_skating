@@ -11,11 +11,41 @@ public class Course {
 
     public String eTime;
 
+    public String mode;
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String time;
     private String name;
     private double price;
 
     private String sTime;
+
+    private int showEnable;
+
+    private String description;
+
+    public int getShowEnable() {
+        return showEnable;
+    }
+
+    public void setShowEnable(int showEnable) {
+        this.showEnable = showEnable;
+    }
 
     public int getEnrollment() {
         return enrollment;
@@ -60,6 +90,7 @@ public class Course {
     private Time c_time;
     private DayOfWeek c_day;
     private String instructor;
+
     private int nc;
 
     public String getName() {
@@ -92,6 +123,16 @@ public class Course {
         this.sTime = time;
         this.name = name;
         this.price = price;
+
+    }
+    public Course(int c_id, String teacher, String location, String time,String name,double price,int showStatus) {
+        this.c_id = c_id;
+        this.instructor = teacher;
+        this.location = location;
+        this.sTime = time;
+        this.name = name;
+        this.price = price;
+        this.showEnable = showStatus;
 
     }
 

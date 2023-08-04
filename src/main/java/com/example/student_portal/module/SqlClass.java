@@ -1,5 +1,5 @@
 package com.example.student_portal.module;
-
+import com.google.gson.Gson;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.relational.core.sql.In;
@@ -26,7 +26,7 @@ public class SqlClass {
     public List<Map<String,Object>> loadClass(int schoolCode)
     {
         Set<Course> sc = new LinkedHashSet<Course>();
-        String sqlLoad = "select class_id, location,classes.time, classes.enrollment,classes.price,classes.startDate, classes.endDate,classes.classCount,class_name,teacher " +
+        String sqlLoad = "select class_id, location,classes.time, classes.enrollment,classes.price,classes.startDate, classes.endDate,classes.classCount,class_name,teacher,description,showEnable " +
                 "from classes  " +
                 "order by class_id;";
 
@@ -56,6 +56,7 @@ public class SqlClass {
             c.setEnrollment((Integer) m.get("enrollment"));
 
             c.setInstructor(m.get("teacher").toString());
+            c.setDescription(m.get("description").toString());
             lc.add(c);
 
         }
@@ -85,6 +86,7 @@ public class SqlClass {
         }
         return target;
     }
+
 
     //get class with class_id and the course have classCount;
     public Course loadSpeClassByCourse(int class_id)
@@ -250,21 +252,110 @@ public class SqlClass {
 
     public int addClass(Course course)
     {
-        int id = totalSizeOfClass()+1;
+        int id = idGeneration(0);
         course.setC_id(id);
         int result= 0;
         String s = ",\""+course.getName()+"\",\""+course.getLocation() + "\",\"" + course.getTime() + "\"," + course.getPrice() + "," + course.getNc() + ",\"" + course.getsTime() + "\",\"" + course.geteTime() + "\");";
         String sql ="Insert Into classes (class_id,teacher,enrollment, capacity,class_name,location,time, price, classCount,startDate,endDate) values " +
                 "("+Integer.toString(course.c_id)+","+"'"+course.getInstructor()+"',"+Integer.toString(0)+","+Integer.toString(course.getMaxStudent())+s;
+        String sql1 = "Insert Into classes (class_id,teacher,enrollment, capacity,class_name,location,time, price, classCount,startDate,endDate,description,mode_of_instruction) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        result=jdbcTemplate.update(sql1,course.getC_id(),course.getInstructor(),course.getEnrollment(),course.getMaxStudent(),course.getName(),course.getLocation(),course.getTime(),course.getPrice(),course.getNc(),course.getsTime(),course.geteTime(),course.getDescription(),course.getMode());
 
-        result=jdbcTemplate.update(sql);
 
         return result;
 
+    }
+    public int idGeneration(int type)
+    {
+        String sql;
+        String title;
+        if(type==0)
+        {
+            //class id
+            sql = "Select class_id from classes";
+            title = "class_id";
+        }
+        else if(type==1){
+            //user_id
+            sql = "Select user_id from users";
+            title = "user_id";
+        }
+        else if(type==2)
+        {
+            sql = "Select id from awards";
+            title = "id";
+        }else if(type==3) {
+            sql = "Select coach_id from coach_info";
+            title = "coach_id";
+        }
+        else if(type==4){
+            sql = "Select id from board";
+            title = "id";
+        }
+        else if(type==5)
+        {
+            sql = "select id from videolinks;";
+            title = "id";
+        }
+        else {
+            sql = "error";
+            title="error";
+        }
+        List<Map<String,Object>> reList = new ArrayList<Map<String,Object>>();
+        reList = jdbcTemplate.queryForList(sql);
+        List<Integer> idList = new LinkedList<Integer>();
+        for(Map<String,Object> m : reList)
+        {
+            idList.add((Integer) m.get(title));
+        }
+        int randomNumber = new Random().nextInt(9000) + 1000;
+        //check repeat:
+        Collections.sort(idList);
+        int low = 0;
+        int high = idList.size()-1;
+        int mid=0;
+        while(low<high)
+        {
+            mid = (low+high)/2;
+            if(randomNumber<idList.get(mid))
+            {
+                high = mid-1;
+            }else if(randomNumber>idList.get(mid))
+            {
+                low = mid + 1;
+            }
+            else {
+                randomNumber = new Random().nextInt(9000) + 1000;
+                low = 0;
+                high = idList.size()-1;
+            }
 
-
+        }
+        return  randomNumber;
 
     }
+    public int disableClass(int id)
+    {
+        String sql = "update classes SET showEnable = 0 where class_id = '"+id+"';";
+        int result = jdbcTemplate.update(sql);
+        return result;
+    }
+
+    public int enableClass(int id)
+    {
+        String sql = "update classes SET showEnable = 1 where class_id = '"+id+"';";
+        int result = jdbcTemplate.update(sql);
+        return result;
+    }
+    public int deleteClass(int id)
+    {
+        String sql = "delete from classes where class_id = "+id+";";
+        int result = jdbcTemplate.update(sql);
+        return result;
+    }
+
+
+
     //return a list of class of Course
     public List<classPersonDataRow> applicationsShow()
     {
@@ -322,9 +413,14 @@ public class SqlClass {
         List<Map<String,Object>> l = jdbcTemplate.queryForList(sql);
         return l.get(0);
 
-
-
-
+    }
+    public void updatePrice(int class_id)
+    {
+        String sql = "select price,classCount from classes where class_id = "+Integer.toString(class_id)+";";
+        List<Map<String,Object>> l = jdbcTemplate.queryForList(sql);
+        double newPrice = (Double) l.get(0).get("price")* 0.2;
+        sql = "update classes set price ="+Double.toString(newPrice)+"where class_id ="+Integer.toString(class_id)+";";
+        jdbcTemplate.execute(sql);
     }
     public void balanceDecs(int user_id, double balance)
     {
@@ -791,5 +887,236 @@ public class SqlClass {
         return aArr;
 
     }
+    public Course searchAClass(int id, int school_code)
+    {
+        String sql = "select class_id, location,classes.time, classes.enrollment,classes.price,classes.startDate, classes.endDate,classes.classCount,mode_of_instruction,class_name,teacher,description,showEnable,description " +
+                "from classes  " +
+                "where class_id="+Integer.toString(id)+";";
+        List<Map<String,Object>> l = jdbcTemplate.queryForList(sql);
+        Map<String ,Object> m = l.get(0);
+        Course c = new Course();
+
+        c.setC_id((Integer)m.get("class_id"));
+        c.setName(m.get("class_name").toString());
+        c.setLocation(m.get("location").toString());
+        c.setPrice((double)m.get("price"));
+        c.setTime(m.get("time").toString());
+        c.setDescription(m.get("description").toString());
+        c.setMode(m.get("mode_of_instruction").toString());
+        if(m.get("startDate") !=null) {
+            c.setsTime(m.get("startDate").toString());
+        }
+        c.setEnrollment((Integer) m.get("enrollment"));
+
+        c.setMode(m.get("mode_of_instruction").toString());
+        c.setInstructor(m.get("teacher").toString());
+        c.setDescription(m.get("description").toString());
+
+        return c;
+
+    }
+//this function get an array which consist of mutiple class description. It get data from the mysql table classboard.
+    public ClassDescription[] getClassBoards()
+    {
+        String sql ="select classBoard_id,name, description,imageLink from classboard order by classboard_id;";
+        List<Map<String,Object>> l = jdbcTemplate.queryForList(sql);
+        ClassDescription [] cdArr = new ClassDescription[l.size()];
+        int index =0;
+        for(Map<String,Object> m: l)
+        {
+            ClassDescription cd = new ClassDescription((Integer) m.get("classBoard_id"),m.get("name").toString(),m.get("description").toString(),
+                    m.get("imageLink").toString());
+            cdArr[index] = cd;
+            index++;
+        }
+
+        return cdArr;
+
+    }
+
+    public int postClassBoards(ClassDescription[] cdArr)
+    {
+        for(ClassDescription cd: cdArr)
+        {
+            String sql = "update classboard set name = '"+cd.getName()+"' , description = '"+cd.getDescription()+"',imageLink = '"+cd.getPicLink()+"' where classBoard_id = "+cd.getId()+";";
+            int result = jdbcTemplate.update(sql);
+            if(result!=1)
+            {
+                return 0;
+            }
+
+        }
+        return 1;
+    }
+
+    public int addAward(Award award)
+    {
+        String sql = "Insert Into awards(id,number,name,description,images) values(?,?,?,?,?);";
+        int id = idGeneration(2);
+        Gson json = new Gson();
+        String arrayJson = json.toJson(award.getImageLinks());
+        int result = jdbcTemplate.update(sql,idGeneration(2),award.getNumber(),award.getName(),award.getDescription(),arrayJson);
+        return result;
+
+    }
+
+    public int updateAward(int id,Award award)
+    {
+        String sql = "update awards set name = (?) ,description = (?),number = (?),images = (?) where id = (?);";
+        Gson json = new Gson();
+        String arrayJson = json.toJson(award.getImageLinks());
+        int result = jdbcTemplate.update(sql,award.getName(),award.getDescription(),award.getNumber(),arrayJson, id);
+
+        return result;
+    }
+
+    public int removeAward(int id)
+    {
+        String sql = "delete from awards where id = (?);";
+        int result = jdbcTemplate.update(sql,id);
+        return result;
+    }
+    public Award[] getAward()
+    {
+
+
+        String sql = "select id,number,name,description,images from awards order by number";
+        List<Map<String,Object>> al = jdbcTemplate.queryForList(sql);
+        Award[] awards = new Award[al.size()];
+        for(int i=0;i<al.size();i++)
+        {
+            Award award = new Award();
+            award.setName(al.get(i).get("name").toString());
+            award.setId((int)al.get(i).get("id"));
+            award.setDescription(al.get(i).get("description").toString());
+            award.setNumber((int)al.get(i).get("number"));
+            String json = al.get(i).get("images").toString();
+            Gson gson =new Gson();
+
+            try {
+                award.setImageLinks(gson.fromJson(json,String[].class));
+            }catch (Exception e){
+                String errorLinks[] = new String[]{"error","errors"};
+                award.setImageLinks(errorLinks);
+            }
+
+
+
+            awards[i] = award;
+
+        }
+        return awards;
+
+
+    }
+
+    public Coach[] getCoaches(){
+        String sql = "select * from coach_info order by coach_info.rank";
+        List<Map<String,Object>> l = new LinkedList<>();
+        l = jdbcTemplate.queryForList(sql);
+        Coach[] users = new Coach[l.size()];
+
+        for(int i=0;i<l.size();i++)
+        {
+            Coach c = new Coach();
+            c.setId((Integer) l.get(i).get("coach_id"));
+            c.setName(l.get(i).get("name").toString());
+            c.setEmail(l.get(i).get("email").toString());
+            c.setDescription(l.get(i).get("description").toString());
+            c.setImageLink(l.get(i).get("imageLink").toString());
+            c.setRank((Integer)l.get(i).get("rank"));
+            users[i] = c;
+        }
+        return users;
+    }
+    //this method update the info of a coach return 0 if success;
+    public int updateCoach(Coach c){
+        String sql = "update coach_info set name = (?), email=(?),description= (?),imageLink =(?) ,coach_info.rank =(?) where coach_id = (?)";
+        int result =jdbcTemplate.update(sql,c.getName(),c.getEmail(),c.getDescription(),c.getImageLink(),c.getRank(),c.getId());
+        return  result;
+    }
+//this method delete the info of a coach return 0 if success
+    public int deleteCoach(int id)
+    {
+        String sql = "delete from coach_info where coach_id = (?);";
+        int result = jdbcTemplate.update(sql,id);
+        return  result;
+    }
+    public  int addCoach(Coach c)
+    {
+        //have not set id yet;
+
+        String sql = "Insert into coach_info (coach_id,name,email,description,imageLink,coach_info.rank) values (?,?,?,?,?,?)";
+        int result = jdbcTemplate.update(sql,idGeneration(3),c.getName(),c.getEmail(),c.getDescription(),c.getImageLink(),c.getRank());
+        return result;
+    }
+//for all boards CRUD method takes a type parameter which means:<0,regular text board with one image possible video>,<>
+    public BoardInfo[] getBoards(int type)
+    {
+        String sql = "SELECT * FROM student_portal.board where board.type = (?) order by number";
+
+        //return all why skate with us board
+        if(type==0)
+        {
+            List<Map<String ,Object>> l = new ArrayList<>();
+            l = jdbcTemplate.queryForList(sql,type);
+            BoardInfo boards[] = new BoardInfo[l.size()];
+            for(int i =0;i<l.size();i++)
+            {
+                Map <String,Object>m = l.get(i);
+
+                BoardInfo b = new BoardInfo();
+                b.setType(Integer.toString(type));
+                b.setId((Integer)m.get("id"));
+                b.setName(m.get("name").toString());
+                b.setDescription(m.get("description").toString());
+                String [] links = new  String[]{m.get("imageLinks").toString()};
+                b.setImageLinks(links);
+                b.setVideoLink(m.get("videoLink").toString());
+                b.setNumber((Integer) m.get("number"));
+                boards[i] = b;
+
+            }
+            return boards;
+        }
+        return new BoardInfo[1];
+
+    }
+    public int addBoard(int type,BoardInfo b)
+    {
+
+        String sql = "insert board (id, name, number,description, board.type,imageLinks,videoLink) values (?,?,?,?,?,?,?)";
+        if(type==0)
+        {
+            int result = jdbcTemplate.update(sql,idGeneration(4),b.getName(),b.getNumber(),b.getDescription(),b.getType(),b.getImageLinks()[0],b.getVideoLink());
+            return result;
+        }
+
+        return 0;
+    }
+
+    public int updateBoard(int type,BoardInfo b)
+    {
+        String sql = "update board set name = (?), number =(?), description=(?),board.type=(?),imageLinks = (?), videoLink =(?) where id = (?)";
+        if(type ==0 )
+        {
+
+            int reult= jdbcTemplate.update(sql,b.getName(),b.getNumber(),b.getDescription(),b.getType(),b.getImageLinks()[0],b.getVideoLink(),b.getId());
+            return reult;
+        }
+        return 0;
+    }
+    public int deleteBoard(int type,BoardInfo b)
+    {
+        String sql = "delete from board where id =(?)";
+        if(type ==0 )
+        {
+            int reult = jdbcTemplate.update(sql,b.getId());
+            return reult;
+        }
+        return 0;
+    }
+
+
 
 }

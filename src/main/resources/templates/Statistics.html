@@ -83,6 +83,13 @@
     </script>
 </head>
 <body>
+<div style="height: 100px">
+    <form th:action="student_main.html" th:object="${aUser}">
+
+        <h4>Current User</h4>
+        <h4 th:text = "${aUser.name}"></h4>
+    </form>
+</div>
 <div style="float: right">
 <form action="adminMain">
     <input type="submit" style=" background-image: linear-gradient(180deg,#90F7Ec,#32CCBC);" value="back to the main page "/>

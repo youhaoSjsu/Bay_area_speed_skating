@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+  <style>
+    .currentClasses{
+      margin-top: 20px;
+      top: 1200px;
+      position: absolute;
+      margin-left: 20px;
+      /*width: 100%;*/
+
+      height: 290px;
+    }
+    .currentClassesDiv{
+      margin-top: 10px;
+      margin-left: 20px;
+      /*width: 100%;*/
+
+      height: 180px;
+    }
+    .classIntroText{
+      font-family: "Adobe Hebrew";
+      color: white;
+    }
+  </style>
+</head>
+
+
+<body ng-app="indexApp" ng-controller="indexCon">
+
+<div class="currentClasses" >
+
+  <div class="currentClassesDiv" ng-repeat="course in courses">
+    <h2 class="classIntroText">{{course.name}}</h2>-->
+    <p class="classIntroText">address:&nbsp;&nbsp;&nbsp; {{course.location}}</p>
+    <p class="classIntroText">time:&nbsp;&nbsp;&nbsp; {{course.time}}</p>
+  </div><br><br>
+
+  <br><br>
+
+  <h4 style="margin-left: 650px;margin-top: 240px; color: #90F7Ec; font-family: 'Bodoni MT'">This web app powered by Youhao Chen @ Charles W Davidson Engineering college SJSU </h4>
+</div>
+
+<script>
+  window.onload = function () {
+
+    var element_obj = document.getElementById("wrapper");
+    var heigth_screen = window.screen.height;
+    var width_screen = window.screen.width;
+    heigth_screen = heigth_screen * 1;
+    element_obj.style.height = heigth_screen + "px";
+    width_screen = width_screen * 1;
+    element_obj.style.width = width_screen + "px";
+  };
+
+  var app = angular.module('indexApp',[]);
+  app.controller('indexCon',function ($scope,$window,$location,$http, $interval){
+    $scope.indexItv = 1000;
+    $scope.test ='hello, this is test';
+
+    $scope.signIn = function ()
+    {
+      $window.location.href = $location.url() + "signIn";
+    };
+    var slides = $scope.slides = [];
+    slides.push({image:'/pics/coach.png', text : 'Coach introduction', description: 'Coach Ge: Former national short track speed skating athlete, US Figure Skating ' +
+              'Association Level 1 coach, Chinese national-level coach, and multiple-time recipient of national short track speed skating awards. The coach has many years ' +
+              'of coaching and competition experience, and many students have won various awards and been accepted to prestigious schools, such as Princeton (in 2022, ' +
+              'three of our club\'s students were in the top ten in the US).' +
+              ' Some students currently work as coaches at Shark Ice Skating, continuing to pass on Coach Ge\'s techniques.'});
+    slides.push({image: '/pics/roller.png',text:'roller skating', description: 'The course covers: beginner roller skating instruction, roller skating speed improvement training, ' +
+              'ice skating basic movement training, physical fitness training, lower limb strength training, as well as ice skating competition skills.'});
+
+    slides.push({image:'/pics/ice.png', text:'Ice skating', description: 'The course covers zero-based ice skating teaching, speed skating skills teaching, physical ' +
+              'training, on-land skating training, strength training, and speed skating competition guidance. The course is taught in groups by two coaches. The course is ' +
+              '1.5 hours long, including 30 minutes of on-land training and 60 minutes of on-ice training.'});
+    slides.push({image:'/pics/pv.png',text:'Private class', description: 'Private ice speed skating lessons are held at Fremont & San José Shark Ice & Cupertino Ice Center. ' +
+              'The course requires a group of 2-5 students. The tuition fee is $60 per person. The ice rink is in public session, so students need to share the coach\'s admission ' +
+              'ticket and pay their own admission ticket, which is around +$20. For one-on-one coaching, the tuition fee is $120 + $15 coach admission ticket.\n' +
+              'After the paid trial lesson, students can sign up for a minimum of 10 lessons.'});
+    slides.push({image: '/pics/club.png',text:'Club', description:'Best and only speed skating club in bay area!'});
+    $scope.currentIndex = 0;
+
+    $interval(function (){
+      $scope.currentIndex = ($scope.currentIndex+1) % $scope.slides.length;
+    },8000);
+    $scope.courses = [];
+    $http.get('/api/showAbleCourses')
+            .then(function (respond){
+              console.log(respond);
+              $scope.courses = respond.data;
+
+            })
+            .catch(function (error){
+              console.log(error);
+            })
+    if($scope.courses.length<1)
+    {
+      $scope.courses.push({})
+    }
+
+
+  });
+</script>
+</body>
+</html>

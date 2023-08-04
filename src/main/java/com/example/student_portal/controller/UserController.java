@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,17 +25,20 @@ public class UserController extends mainCont {
 
     @RequestMapping(value="/registClass",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ModelAndView userRegister(@RequestParam("selectIds") int[] selectIds, String comment)
+    public ModelAndView userRegister(@RequestParam("selectIds") int[] selectIds, String comment, HttpServletRequest request)
     {
         ModelAndView mv = new ModelAndView("userRegist.html");
         List<Course> l= loadClass(0);
+
+        HttpSession session = request.getSession();
+        User u = (User)session.getAttribute("currentU");
 
         if(selectIds==null)
         {
 
             //load all class from chosen;
             mv.addObject("classList",convertListToArry(l));             //this template can only take array
-            mv.addObject("aUser",CurrUser);
+            mv.addObject("aUser",u);
             mv.addObject("reminder", "selected none");
 
             return mv;
@@ -47,7 +51,7 @@ public class UserController extends mainCont {
             for(int i : selectIds)
             {
 
-                s= classSql.writeAnApplication(CurrUser.getId(),i,comment);
+                s= classSql.writeAnApplication(u.getId(),i,comment);
 
                 if(!s)
                     break;;
@@ -59,7 +63,7 @@ public class UserController extends mainCont {
             else {
                 mv.addObject("reminder", "success thank you, waiting for the admin to approve");
             }
-            mv.addObject("aUser",CurrUser);
+            mv.addObject("aUser",u);
             //this template can only take array
             mv.addObject("classList",convertListToArry(l));
 
@@ -70,28 +74,35 @@ public class UserController extends mainCont {
     }
     @RequestMapping(value="/addClass",method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView preAdd()
+    public ModelAndView preAdd(HttpServletRequest request)
     {
+        HttpSession session = request.getSession();
+        User u = (User)session.getAttribute("currentU");
+
+
         ModelAndView mv = new ModelAndView("userRegist.html");
         List<Course> l= loadClass(0);
 
 
             //load all class from chosen;
         mv.addObject("classList",convertListToArry(l));
-        mv.addObject("aUser",CurrUser);
+        mv.addObject("aUser",u);
         mv.addObject("reminder", "please selecct");
 
         return mv;
     }
     @RequestMapping(value = "/finance",method = RequestMethod.GET)
-    public ModelAndView showFinance()
+    public ModelAndView showFinance(HttpServletRequest request)
     {
+        HttpSession session = request.getSession();
+        User u = (User)session.getAttribute("currentU");
+
         ModelAndView mv = new ModelAndView("userFinance");
         SqlClass sqlClass = new SqlClass(jdbcTemplate);
-        Order[] oArr = sqlClass.checkUserOrders(CurrUser.getId());
-        double b = sqlClass.checkUserBalance(CurrUser.getId());
+        Order[] oArr = sqlClass.checkUserOrders(u.getId());
+        double b = sqlClass.checkUserBalance(u.getId());
         mv.addObject("balance",b);
-        mv.addObject("aUser",CurrUser);
+        mv.addObject("aUser",u);
         mv.addObject("classList",oArr);
         return mv;
 
@@ -128,15 +139,16 @@ public class UserController extends mainCont {
     }
     @RequestMapping(value="/stMain",method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView showUserTokeAndMain()
+    public ModelAndView showUserTokeAndMain(HttpServletRequest request)
     {
-
+        HttpSession session = request.getSession();
+        User u= (User) session.getAttribute("currentU");
 
         List<Course> lc = new ArrayList<Course>();
-        if(CurrUser.getRoleCode()==1)
+        if(u.getRoleCode()==1)
         {
             SqlClass temp = new SqlClass(jdbcTemplate);
-            lc= temp.showtoke(1, CurrUser.getId());
+            lc= temp.showtoke(1, u.getId());
 
         }
 
@@ -148,7 +160,7 @@ public class UserController extends mainCont {
             cArr[i] = lc.get(i);
         }
 
-        mv.addObject("aUser",CurrUser);
+        mv.addObject("aUser",u);
         mv.addObject("classList",cArr);             //this template can only take array
 
         return mv;
@@ -166,9 +178,10 @@ public class UserController extends mainCont {
     //@RequestParam("dates") String []dates,
     @RequestMapping(value="/absentExcute",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ModelAndView userAbsent(@RequestParam("selectIds") int[]selectIds,@RequestParam("dates") String []dates,String []mDates, String comment) throws ParseException {
+    public ModelAndView userAbsent(HttpServletRequest request,@RequestParam("selectIds") int[]selectIds,@RequestParam("dates") String []dates,String []mDates, String comment) throws ParseException {
 
-
+        HttpSession session = request.getSession();
+        User u = (User)session.getAttribute("currentU");
 
         ModelAndView mv = new ModelAndView("userAbsent.html");
         List<classOfaCourse> coc = new ArrayList<classOfaCourse>();
@@ -204,7 +217,7 @@ public class UserController extends mainCont {
             SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
             String refeDate = dateFormat.format(date);
 
-            classOfaCourse cc = new classOfaCourse(selectIds[i],CurrUser.getId(),ls.get(i),refeDate,comment);
+            classOfaCourse cc = new classOfaCourse(selectIds[i],u.getId(),ls.get(i),refeDate,comment);
             cc.setMd(md.get(i));
 
             coc.add(cc);
@@ -214,8 +227,8 @@ public class UserController extends mainCont {
         SqlClass sqlClass = new SqlClass(jdbcTemplate);
         sqlClass.userAbsent(coc);
 
-        mv.addObject("aUser", CurrUser);
-        mv.addObject("classList",convertListToArry(new SqlClass(jdbcTemplate).showtoke(CurrUser.getRoleCode(),CurrUser.getId())));
+        mv.addObject("aUser", u);
+        mv.addObject("classList",convertListToArry(new SqlClass(jdbcTemplate).showtoke(u.getRoleCode(),u.getId())));
         mv.addObject("reminder", "absent form submitted, thank you");
 
 
@@ -226,26 +239,31 @@ public class UserController extends mainCont {
     }
     @RequestMapping(value="/absent",method = {RequestMethod.GET})
     @ResponseBody
-    public ModelAndView preUserAbsent()
+    public ModelAndView preUserAbsent(HttpServletRequest request)
     {
+        HttpSession session = request.getSession();
+        User u = (User)session.getAttribute("currentU");
+
         SqlClass temp = new SqlClass(jdbcTemplate);
-        List<Course> l = temp.showtoke(1, CurrUser.getId());
+        List<Course> l = temp.showtoke(1, u.getId());
         ModelAndView mv = new ModelAndView("userAbsent.html");
         mv.addObject("classList",convertListToArry(l));
-        mv.addObject("aUser", CurrUser);
+        mv.addObject("aUser", u);
         mv.addObject("reminder", "please selecct");
         return mv;
     }
 //================================user drop course pre and excution============================
     @RequestMapping(value="/drop",method = {RequestMethod.GET})
     @ResponseBody
-    public ModelAndView preUserDrop()
+    public ModelAndView preUserDrop(HttpServletRequest request)
     {
+        HttpSession session = request.getSession();
+        User u = (User)session.getAttribute("currentU");
         SqlClass temp = new SqlClass(jdbcTemplate);
-        List<Course> l = temp.showtoke(1, CurrUser.getId());
+        List<Course> l = temp.showtoke(1, u.getId());
         ModelAndView mv = new ModelAndView("userDrop.html");
         mv.addObject("classList",convertListToArry(l));
-        mv.addObject("aUser", CurrUser);
+        mv.addObject("aUser", u);
         mv.addObject("reminder", "please selecct");
 
 
@@ -253,8 +271,10 @@ public class UserController extends mainCont {
     }
     @RequestMapping(value="/dropExcute",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ModelAndView userDrop(@RequestParam("selectIds") int []selectIds,@RequestParam("dates") String[] dates, String comment) throws ParseException {
+    public ModelAndView userDrop(HttpServletRequest request,@RequestParam("selectIds") int []selectIds,@RequestParam("dates") String[] dates, String comment) throws ParseException {
 
+        HttpSession session = request.getSession();
+        User u = (User)session.getAttribute("currentU");
 
         ModelAndView mv = new ModelAndView("userDrop.html");
         List<classOfaCourse> coc = new ArrayList<classOfaCourse>();
@@ -281,16 +301,16 @@ public class UserController extends mainCont {
                 return new ModelAndView("error.html");
             }
 
-            classOfaCourse cc = new classOfaCourse(selectIds[i],CurrUser.getId(),ls.get(i),refeDate,comment);
+            classOfaCourse cc = new classOfaCourse(selectIds[i],u.getId(),ls.get(i),refeDate,comment);
             coc.add(cc);
         }
 
         //excution:
         SqlClass sqlClass = new SqlClass(jdbcTemplate);
-        sqlClass.userDrop(coc,CurrUser.getId(),comment);
+        sqlClass.userDrop(coc,u.getId(),comment);
 
-        mv.addObject("aUser", CurrUser);
-        mv.addObject("classList",convertListToArry(new SqlClass(jdbcTemplate).showtoke(CurrUser.getRoleCode(),CurrUser.getId())));
+        mv.addObject("aUser", u);
+        mv.addObject("classList",convertListToArry(new SqlClass(jdbcTemplate).showtoke(u.getRoleCode(),u.getId())));
         mv.addObject("reminder", "drop form submitted, thank you");
 //        Selection session[] = new Selection()[];
 //
@@ -312,41 +332,47 @@ public class UserController extends mainCont {
 
     @RequestMapping(value="/userSet",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ModelAndView preSetting()
+    public ModelAndView preSetting(HttpServletRequest request)
     {
+        HttpSession session = request.getSession();
+        User u = (User)session.getAttribute("currentU");
+
         ModelAndView mv = new ModelAndView("userSeetingPage.html");
 
         //system haven't loaded the zip now
 
 
-        String sql = "select* from users where users.user_id= " + Integer.toString(CurrUser.getId()) + ";";
+        String sql = "select* from users where users.user_id= " + Integer.toString(u.getId()) + ";";
         List<Map<String, Object>> lc = new ArrayList<>();
         lc = jdbcTemplate.queryForList(sql);
 
-        CurrUser.setZip((String) (lc.get(0).get("zip")));
-        CurrUser.setNumber((String) (lc.get(0).get("phone")));
-        CurrUser.setEmail((String) (lc.get(0).get("email")));
+        u.setZip((String) (lc.get(0).get("zip")));
+        u.setNumber((String) (lc.get(0).get("phone")));
+        u.setEmail((String) (lc.get(0).get("email")));
         mv.addObject("reminder", "you can change personal info here");
-        mv.addObject("aUser",CurrUser);
+        mv.addObject("aUser",u);
         return mv;
     }
     @RequestMapping(value="/userSetExcute")
 
-    public String preSetting(User aUser)
+    public String preSetting(User aUser,HttpServletRequest request)
     {
+        HttpSession session = request.getSession();
+        User u = (User)session.getAttribute("currentU");
         //the ID and role should inherient CurrUser;
-        aUser.setId(CurrUser.getId());
-        aUser.setRoleCode(CurrUser.getRoleCode());
+        aUser.setId(u.getId());
+        aUser.setRoleCode(u.getRoleCode());
 
         SqlClass sql = new SqlClass(jdbcTemplate);
-        if(sql.checkDuplicate(aUser,CurrUser))
+        if(sql.checkDuplicate(aUser,u))
         {
             return "/error invalid userName";
         }
         else
         {
             sql.userUpdate(aUser);
-            CurrUser = aUser;
+            session.setAttribute("currentU",aUser);
+            //u = aUser;
         }
         return "redirect:/userSet";
     }

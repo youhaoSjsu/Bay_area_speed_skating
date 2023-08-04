@@ -34,7 +34,7 @@
         .search-height{margin-left: 40px;border:0px solid #F00; margin-top: -20px; width:250px; height:60px; }
 
 
-        .div-height{border:0px solid #F00; width:70px; height:60px}
+        .div-height{border:0px solid #F00; width:70px; height:60px; margin-left: 10px}
         .button-style{border: 1px solid #0000ff; width:70px; height:50px; color:#0000ff;}
         .image-style{border: 0px solid #0000ff; width:70px; height:50px; background:#0000ff;}
     </style>
@@ -84,25 +84,11 @@
         <img  class="image-style", />
         <p class="p-style">seting Option</p>
     </div>
+    <div ng-click="hpMage()" class="div-height", align="center" >
+        <img  class="image-style" />
+        <p class="p-style">Home Page Management</p>
+    </div>
 
-    <!--    <div  class = "search-height">-->
-    <!--        <form th:action="search" method="post" th:object = ${prod}>-->
-    <!--            <tr> search:-->
-    <!--                <p>item:-->
-    <!--                    <input class="search-in" type="search" name="name" id="" value="" />-->
-    <!--                </p>-->
-    <!--                <p>location:-->
-    <!--                    <input class="search-in" type="search" name="location" id="" value="" />-->
-    <!--                </p>-->
-    <!--            </tr>-->
-    <!--            <input type="submit" value="Submit"/>-->
-
-    <!--        </form>-->
-    <!--    </div>-->
-
-
-
-    <!--            th:action=""-->
 </div>
 <form th:object="${aUser}" th:action="signIn">
     <div style="float: right">
@@ -148,7 +134,10 @@
         }
         $scope.settingClicker =function ()
         {
-            $window.location.href = $location.url()+"adSetting"
+            $window.location.href = $location.url()+"adSetting";
+        }
+        $scope.hpMage = function (){
+            $window.location.href = $location.url()+"adHp";
         }
 
 

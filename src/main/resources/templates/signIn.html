@@ -5,6 +5,8 @@
     <title>Title</title>
 </head>
 <body>
+<h2>Bay Area Speed Skating Club</h2>
+<h3> sign in</h3>
 <form th:action="signIn" class="form-horizontal" style="margin-top: 70px">
     <div class="form-group">
         <label  class="col-sm-2 control-label" style="font-size: 30px;text-align: center">Username</label>
@@ -18,13 +20,22 @@
             <input name="password" type="password" class="form-control" id="password" placeholder="Password" style="background-color: transparent; height:50px;width: 400px;font-size: 20px">
         </div>
     </div>
+    <input type="submit" class="btn btn-primary btn-lg" value="submit" style="margin-top:70px;width: 200px;font-size: 20px;font-weight: bold"> </br>
+</form>
+<br>
+<br>
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <input type="submit" class="btn btn-primary btn-lg" value="submit" style="margin-top:70px;width: 200px;font-size: 20px;font-weight: bold">
+
+            <form th:action="signUp">
+                <p style="margin-top:70px;width: 150px;font-size: 12px;font-weight: bold;color: blue">don't have an account?</p>
+                <input type = "submit" value ="sign Up" style="margin-top:10px;width: 100px;font-size: 12px;font-weight: bold" />
+            </form>
+
         </div>
     </div>
-</form>
+
 
 
 </body>
