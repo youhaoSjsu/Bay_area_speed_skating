@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div style="height: 100px">
+    <form th:action="student_main.html" th:object="${aUser}">
+
+        <h4>Current User</h4>
+        <h4 th:text = "${aUser.name}"></h4>
+    </form>
+</div>
+<form th:action="newClassFeedback" th:userDto="${Course}">
+<h1>New class form</h1>
+    <p>name</p>
+    <input name="className" type="text" th:field="*{Course.name}" class="detail"/>
+
+    <p>max student</p>
+    <input name="maxNum" th:field="*{Course.maxStudent}" class="detail"/>
+
+    <p>time</p>
+    <input name="classTime" th:field="*{Course.time}" class="detail"/>
+
+    <p>location</p>
+    <input name="location" th:field="*{Course.location}" class="detail"/>
+
+
+    <p>price</p>
+    <input name="price"  th:field="*{Course.price}" class="detail"/>
+
+    <p>length</p>
+    <input name="classCount"  th:field="*{Course.nc}" class="detail"/>
+
+    <p>start Date(YYYY-MM-DD)</p>
+    <input name="startDate"  th:field="*{Course.sTime}" class="detail"/>
+
+    <p>End Date(YYYY-MM-DD)</p>
+    <input name="endDate" th:field="*{Course.eTime}" class="detail"/>
+
+    <p>instructor</p>
+    <input name="endDate" th:field="*{Course.instructor}" class="detail"/>
+
+    <p>Description</p>
+    <input name="description" th:field="*{Course.description}" class="detail"/>
+
+    <p>Mode</p>
+    <input name="description" th:field="*{Course.mode}" class="detail"/>
+
+    <br></br>
+    <br>
+    <br><br>
+
+    <input type="submit" value="submit" class="detail"/>
+
+
+
+</form>
+
+</body>
+</html>

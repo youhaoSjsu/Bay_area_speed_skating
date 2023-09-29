@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div style="height: 100px">
+    <form th:action="student_main.html" th:object="${aUser}">
+
+        <h4>Current User</h4>
+        <h4 th:text = "${aUser.name}"></h4>
+    </form>
+</div>
+<div style="float: right">
+    <form action="adminMain">
+        <input type="submit" style=" background-image: linear-gradient(180deg,#90F7Ec,#32CCBC);" value="back to the main page "/>
+    </form>
+</div>
+<div class="grid_div" th:object = "${dates}">
+    <p th:text="${reminder}" style="color: blue"></p>
+    <table border="1"  id="hidden-table-info">
+        <thead>
+        <tr>
+            <th>classid</th>
+            <th>class name</th>
+            <th>enrollment</th>
+            <th>price</th>
+            <th>start Date</th>
+            <th>instructor </th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="li_style" th:each="class, iStat: ${classList}">
+
+            <td th:text="${class.c_id}"></td>
+            <td th:text="${class.name}"></td>
+            <td th:text="${class.enrollment}"></td>
+            <td th:text="${class.price}"></td>
+            <td th:text="${class.sTime}"></td>
+            <td th:text="${class.instructor}"></td>
+            <!--        <td><input type="checkbox" name = "selectIds" th:value="${class.class_id}${class.user_id}"/></td>-->
+
+            <td>
+                <form th:object="${class}" th:action="dropHandler">
+                    <input name ="classId" th:value="${class.c_id}" type="hidden" />
+
+                    <input type="submit" value="view students" />
+
+                </form>
+            </td>
+
+
+
+
+
+
+        </tr>
+        </tbody>
+    </table>
+    <br><br><br><br>
+<p>============================================================================================================================================================================================================================</p>
+    <div style="background-image: linear-gradient(180deg,#90F7Ec,#32CCBC);color: rebeccapurple" th:object="${dr}" th:if="${not #lists.isEmpty(cpdrs)}">
+    <table border="1"  >
+        <h2>Class:</h2>
+        <h3 th:text = "${dr?.class_id}"></h3>
+        <h4 th:text = "${dr?.class_name}"></h4>
+        <thead>
+        <tr>
+            <th>class ID</th>
+            <th>Student ID</th>
+            <th>date</th>
+            <th> paid</th>
+            <th>regisCount</th>
+            <th> </th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="li_style" th:each="cpdr, iStat: ${cpdrs}">
+
+            <td th:text="${cpdr?.class_id}"></td>
+            <td th:text="${cpdr?.user_id}"></td>
+            <td th:text="${cpdr?.app_date}"></td>
+            <td th:text="${cpdr?.price}"></td>
+            <td th:text="${cpdr?.orderCount}"></td>
+
+            <!--        <td><input type="checkbox" name = "selectIds" th:value="${class.class_id}${class.user_id}"/></td>-->
+
+            <td>
+                <form  th:action="adDropExute">
+                    <input name ="user_id" th:value="${cpdr?.user_id}" type="hidden" />
+                    <input name="class_id" th:value = "${cpdr?.class_id}" type="hidden"/>
+                    <input type="search" name="comment" value="write reasons"/>
+                    <input type="submit" value="drop" />
+
+                </form>
+            </td>
+
+
+
+
+
+
+        </tr>
+        </tbody>
+    </table>
+
+    </div>
+</body>
+</html>

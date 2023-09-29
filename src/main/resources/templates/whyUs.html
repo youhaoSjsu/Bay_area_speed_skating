@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+<style>
+    body{
+        /*margin-top:0px;*/
+        /*margin-left: 0px;*/
+        /*width: 2000px;*/
+        margin: 0; /* Remove default margin */
+        padding: 0; /* Remove default padding */
+        overflow-x: hidden; /* Prevent horizontal scrollbars */
+    }
+.listView{
+    position: relative;
+    top:100px;
+    display: inline-block;
+    width: 100%;
+    align-items: center;
+    flex-direction: column;
+
+
+}
+.accordion
+{
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    height: 100px;
+    text-align: center;
+    outline: none;
+    text-align: center;
+    transition: 0.4s;
+    font-family: "Adobe Hebrew";
+    font-size: 20px;
+    bottom-border-width: 2px;
+    border-bottom-color: #32CCBC;
+}
+.panel {
+    padding: 0 18px;
+    /*display: none!important;*/
+    background-color: black;
+    overflow: hidden;
+    border-radius: 5px;
+    width: 95%;
+    text-align: center;
+    flex-direction: column;
+}
+.active, .accordion:hover {
+    background-color: #32CCBC;
+}
+.accordionP
+{
+    color: white;
+    font-family: "Adobe Hebrew";
+    text-align: center;
+    width: 95%;
+}
+.mainBody
+{
+    /*width: 100%;*/
+    height: 2500px;
+    /*position: absolute;*/
+    background-color: black;
+
+
+}
+.buttonOnvVideo {
+    /*width: 100%;*/
+    z-index: 15;
+    position: absolute;
+
+    top: -10px;
+    color: white;
+
+}
+.headerTag{
+
+    display:inline-block;
+    width: 220px;
+    height:40px;
+    margin-left: 20px;
+    float: right;
+    position: relative;
+    top: 0px;
+}
+
+</style>
+
+</head>
+<body ng-App="whyApp" ng-controller="whyCon" >
+<div class="mainBody">
+    <div class="headerDiv">
+        <div  style="width: 150px;   ">
+            <form  class ="buttonOnvVideo" th:action="signIn">
+                <!--            <h4 style="margin-left: -1500px;margin-top: 10px">Powered by Youhao Chen at Charles W Davidson Engineering college SJSU</h4>-->
+
+                <div class="headerTag">
+                    <h3 class="buttonOnvVideo">what is speed Skating?</h3>
+                </div>
+                <div class="headerTag" ng-click ="ourAwards()">
+                    <h3 class="buttonOnvVideo" >Our awards</h3>
+                </div>
+                <div class="headerTag" ng-click="ourCoaches()">
+                    <h3 class="buttonOnvVideo" >Coaches</h3>
+                </div>
+
+                <div ng-click ="whyUs()" class="headerTag">
+                    <img style="margin-left: -24px;margin-top: 10px; width: 20px;height: 20px" src="/pics/club.png">
+                    <h3  class="buttonOnvVideo" >why join us</h3>
+                </div>
+                <div ng-click ="homePage()" class="headerTag">
+                    <img style="margin-left: -24px;margin-top: 10px; width: 20px;height: 20px" src="/pics/return.png">
+                    <h3  class="buttonOnvVideo" >Home Page</h3>
+                </div>
+
+                <div ng-click ="signIn()" class="headerTag">
+                    <img style="margin-left: -24px;margin-top: 10px; width: 20px;height: 20px" src="/pics/add.png">
+                    <h3  class="buttonOnvVideo" >SignIn & SignUp</h3>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <div class="listView">
+        <div style="align-items: center; flex-direction: column; width: 100%;height: 150px" ng-repeat="board in boards">
+            <button class="accordion" ng-click="toggleShow(board)">{{board.name}}</button>
+            <div class="panel" ng-show="board.show">
+                <p class="accordionP">{{board.description}}</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+var app = angular.module('whyApp',[]);
+app.controller('whyCon',function ($http,$scope,$window,$location){
+    $scope.boards = [];
+    $scope.showBoards = [];
+
+    $http.post('/api/getBoards', 0)
+        .then(function(respond){
+            $scope.boards = respond.data;
+
+            angular.forEach($scope.boards,function(board){
+                board.show = false;
+            })
+        }).catch(function(error){
+            alert(error);
+    })
+
+
+
+    $scope.toggleShow = function (board)
+    {
+        board.show = !board.show;
+    }
+
+    $scope.signIn = function ()
+    {
+        $window.location.href = $location.url() + "signIn";
+    };
+    $scope.ourCoaches = function ()
+    {
+        $window.location.href = $location.url() + "ourCoaches";
+    }
+    $scope.whyUs = function ()
+    {
+        $window.location.href = $location.url() + "whyUs";
+    }
+    $scope.ourAwards = function (){
+        $window.location.href = $location.url() + "ourAward";
+    }
+    $scope.homePage = function ()
+    {
+        $window.location.href = $location.url() + "index";
+    }
+
+})
+
+</script>
+
+
+</body>
+</html>

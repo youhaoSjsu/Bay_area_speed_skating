@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .buttonInput{
+            font-family: Helvetica, sans-serif;
+            /*text-transform: uppercase;*/
+            outline: 0;
+            background-image: linear-gradient(180deg,#90F7Ec,#32CCBC);
+            width: 280px;
+            height:50px;
+            border: 0;
+            padding: 15px;
+            color: darkviolet;
+            font-size: 20px;
+            cursor: pointer;
+            margin-top:20px;
+            horizontal-align: center;
+        }
+
+        table.altrowstable {
+            font-family: verdana,arial,sans-serif;
+            font-size:11px;
+            color:#333333;
+            border-width: 1px;
+            border-color: #a9c6c9;
+            border-collapse: collapse;
+        }
+        table.altrowstable th {
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #a9c6c9;
+        }
+        table.altrowstable td {
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #a9c6c9;
+        }
+        .oddrowcolor{
+            background-color:#d4e3e5;
+        }
+        .evenrowcolor{
+            background-color:#c3dde0;
+        }
+
+
+
+    </style>
+    <script>
+        function altRows(id){
+
+            if(document.getElementsByTagName){
+
+                var table = document.getElementById(id);
+
+                var rows = table.getElementsByTagName("tr");
+
+                for(i = 0; i < rows.length; i++){
+                    if(i % 2 == 0){
+
+                        rows[i].className = "evenrowcolor";
+
+                    }else{
+
+                        rows[i].className = "oddrowcolor";
+
+                    }}}}
+
+        window.onload=function(){
+
+            altRows('alternatecolor');}
+
+        window.onload=function(){
+
+            altRows('alInst');}
+        window.onload=function(){
+
+            altRows('alUser');}
+    </script>
+</head>
+<body>
+<div style="height: 100px">
+    <form th:action="student_main.html" th:object="${aUser}">
+
+        <h4>Current User</h4>
+        <h4 th:text = "${aUser.name}"></h4>
+    </form>
+</div>
+<div style="float: right">
+<form action="adminMain">
+    <input type="submit" style=" background-image: linear-gradient(180deg,#90F7Ec,#32CCBC);" value="back to the main page "/>
+</form>
+</div>
+<div >
+    <form action = "classRank" >
+        <input class="buttonInput" type="submit" value = "class rank" name = "button" />
+    </form>
+
+    <form action = "instructorRank">
+        <input  class="buttonInput" type="submit" value = "instructor rank" name ="button_add"/>
+
+    </form>
+
+    <form action = "consumptionRank">
+
+        <input class="buttonInput"  type= "submit" value = "consumption" />
+        <div >
+        <span>start Date YYYY-MM-DD</span>
+        <input type="search" name="sDate" />
+        <span>end Date</span>
+        <input type="search" name="eDate"/>
+        </div>
+    </form>
+
+<!--    <form action= ".jsp">-->
+<!--        <input class= "buttonInput" type = "submit" value = "Comment On Class"/>-->
+<!--    </form>-->
+
+
+<!--    <form action ="allClasses.jsp">-->
+<!--        <input class= "buttonInput" type = 'submit' value = "Look Up Classes" />-->
+<!--    </form>-->
+
+
+<!--    <form action="viewMyGrade.jsp">-->
+<!--        <input class= "buttonInput"  type= 'submit' value = "View My Grades">-->
+<!--    </form>-->
+
+<!--    <form action= "shopCart.jsp">-->
+
+<!--        <input class= "buttonInput" type='submit' value = "Saved Classes">-->
+<!--    </form>-->
+
+</div>
+
+<div style="background-image: linear-gradient(180deg,#90F7Ec,#32CCBC);color: blueviolet; margin-top: 20px" th:object="${classList}" th:if="${not #lists.isEmpty(classList)}">
+    <p>=============================================================================================</p>
+    <table border="1"  class="altrowstable" id="alternatecolor" >
+
+
+        <h4>class list order by enrollment</h4>
+        <thead>
+        <tr>
+            <th>rank</th>
+            <th>class ID</th>
+            <th>class name</th>
+            <th>enrollment</th>
+
+
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="li_style" th:each="class, iStat: ${classList}"  onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';">
+
+            <td th:text="${iStat.index}"></td>
+            <td th:text="${class?.c_id}"></td>
+            <td th:text="${class?.name}"></td>
+            <td th:text="${class?.enrollment}"></td>
+
+
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<div style="background-image: linear-gradient(180deg,#90F7Ec,#32CCBC);color: blueviolet; margin-top: 20px" th:object="${instList}" th:if="${not #lists.isEmpty(instList)}">
+    <p>=============================================================================================</p>
+    <table border="1"  class="altrowstable" id="alInst" >
+
+
+        <h4>instructor list order by enrollment</h4>
+        <thead>
+        <tr>
+            <th>rank</th>
+            <th>instructor ID</th>
+            <th>instructor name</th>
+            <th>class count</th>
+            <th>total students</th>
+            <th>average student count</th>
+
+
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="li_style" th:each="inst, iStat: ${instList}"  onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';">
+
+            <td th:text="${iStat.index}"></td>
+            <td th:text="${inst?.user_id}"></td>
+            <td th:text="${inst?.username}"></td>
+            <td th:text="${inst?.classCount}"></td>
+            <td th:text="${inst?.studentCount}"></td>
+            <td th:text="${inst?.average}"></td>
+
+
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<!--////////////////////////////////////////-->
+<div style="background-image: linear-gradient(180deg,#90F7Ec,#32CCBC);color: blueviolet; margin-top: 20px" th:object="${userList}" th:if="${not #lists.isEmpty(userList)}">
+    <p>=============================================================================================</p>
+    <table border="1"  class="altrowstable" id="alUser" >
+
+
+        <h4>users order by consumption</h4>
+        <thead>
+        <tr>
+            <th>order id</th>
+            <th>user id</th>
+            <th>user name</th>
+            <th>sum of consumption</th>
+
+
+
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="li_style" th:each="user, iStat: ${userList}"  onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';">
+
+            <td th:text="${iStat.index}"></td>
+            <td th:text="${user?.id}"></td>
+            <td th:text="${user?.name}"></td>
+            <td th:text="${user?.consumption}"></td>
+
+
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

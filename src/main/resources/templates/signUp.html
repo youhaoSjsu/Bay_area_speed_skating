@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="signUpCheck">
+  <h1>New class form</h1>
+  <p>name</p>
+  <input name="username" type="text"  class="detail"/>
+
+  <p>number</p>
+  <input name="number"  class="detail"/>
+
+  <p>email</p>
+  <input name="email"  class="detail"/>
+
+  <p>zip code</p>
+  <input name="zip" class="detail"/>
+
+
+  <p>password</p>
+  <input name="password"  class="detail"/>
+
+  <p>repeat password</p>
+  <input name="repeat"  class="detail"/>
+
+
+  <br></br>
+  <br>
+  <br><br>
+  <p style="color: red" th:text = "${reminder}"></p>
+
+  <input type="submit" value="submit" class="detail"/>
+
+</form>
+
+</body>
+</html>

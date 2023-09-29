@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+    <script src="https://cdn.bootcss.com/angular.js/1.7.0/angular-route.min.js"></script>
+    <title>awards management</title>
+    <style>
+        /*div{*/
+        /*    display: inline-block; float: left; margin-top: 15px;*/
+        /*}*/
+        .p-style{
+            margin-top:5px ;
+        }
+        .good_img
+        {
+            width:200px; height:100%; background:#0000ff; margin-left: 0px; margin-top: 0px;
+        }
+        .grid_div
+        {
+            margin-top:50px;width: 100%; height: 500px;background: #FAEBD7;
+        }
+        .li_style
+        {
+            width: 100%; height: 100px; background: #00ff78;border-bottom: 1px solid#500257;
+            list-style:none;
+        }
+        .lable_style
+        {
+            margin-left:80%;
+        }
+        .search-in{margin-top: 0px}
+        .search-height{margin-left: 40px;border:0px solid #F00; margin-top: -20px; width:250px; height:60px; }
+
+
+        .div-height{ display: inline-block; float: left; margin-top: 15px;border:0px solid #F00; width:70px; height:60px; margin-left: 10px}
+        .button-style{border: 1px solid #0000ff; width:70px; height:50px; color:#0000ff;}
+        .image-style{border: 0px solid #0000ff; width:70px; height:50px; background:#0000ff;}
+        .adHpButton
+        {
+            color: blue;
+            background-color: aquamarine;
+            width: 200px;
+            height: 50px;
+        }
+        .adHpFunctions{
+            height: 2000px;
+            position: relative;
+            top: 200px;
+            left: -500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .dpTextarea{
+            height: 150px;
+            width: 400px;
+        }
+        .linkTextarea{
+            height: 20px;
+            width: 400px;
+        }
+        .bueatyButton
+        {
+            width: 100px;
+            height: 50px;
+            border-radius: 5px;
+            background: linear-gradient(#FFF886, #F072B6);
+        }
+    </style>
+</head>
+<body>
+<H2>Home Page Management</H2>
+<form th:action="student_main.html" th:object="${aUser}">
+
+    <h4 th:text = "${aUser.name}"></h4>
+</form>
+
+
+
+<div ng-app="myApp" ng-controller="boardController" align="top">
+
+
+    <div ng-click="marketClick()" ng-app="myApp"  class="div-height", align="center">
+
+        <img class="image-style" />
+        <p class="p-style" >{{kkll}}</p>
+    </div>
+
+    <div ng-click="addClassClick()" class="div-height", align="center" >
+        <img class="image-style", />
+        <p class="p-style">add class</p>
+    </div>
+
+    <div  ng-click="registrations()" class="div-height", align="center" >
+        <img class="image-style", />
+        <p class="p-style">registration handler</p>
+    </div>
+    <div ng-click="vacateClick()" class="div-height", align="center" >
+        <img  class="image-style", />
+        <p class="p-style">absent handler</p>
+    </div>
+    <div ng-click="dropClick()" class="div-height", align="center" >
+        <img  class="image-style", />
+        <p class="p-style">drop</p>
+    </div>
+
+    <div ng-click="statisClicker()" class="div-height", align="center" >
+        <img  class="image-style", />
+        <p class="p-style">statistic tools</p>
+    </div>
+
+    <div ng-click="settingClicker()" class="div-height", align="center" >
+        <img  class="image-style", />
+        <p class="p-style">seting Option</p>
+    </div>
+    <div ng-click="hpMage()" class="div-height", align="center" >
+        <img  class="image-style" />
+        <p class="p-style">Home Page Management</p>
+    </div>
+
+
+    <form th:object="${aUser}" th:action="signIn">
+        <div style="float: right">
+
+            <p>UserName:
+                <label th:text="${aUser?.name}"></label>
+            </p>
+            <input type="submit" value="switch"/>
+
+
+        </div>
+    </form>
+    <br><br>
+    <div class="adHpFunctions" >
+
+        <div style="display: inline-block" ng-repeat="board in boards">
+            <h4>board</h4>
+            <h4>{{board.id}}</h4>
+            <h4>name</h4>
+            <input ng-model="board.name"/>
+            <br>
+            <h4>rank</h4>
+            <input ng-model="board.number"/>
+            <br>
+
+            <h4>description</h4>
+            <textarea class="dpTextarea" ng-model="board.description">dp</textarea>
+            <br>
+
+            <h4>images</h4>
+            <textarea style="height: 50px;width:200px" ng-model="board.imageLinks[0]">dp</textarea>
+            <br>
+            <h4>video</h4>
+            <textarea style="height: 50px;width:200px" ng-model="board.videoLink">dp</textarea>
+            <br>
+            <div style="width: 200px;height: 50px;display: inline-block">
+                <button ng-click="updateBoard0(board.id)">submit</button>
+                <button ng-click="removeBoard0(board.id)">remove</button>
+            </div>
+
+
+            <p style="color: blue">========================================================================</p>
+            <br><br>
+
+        </div>
+
+        <div style="margin-left:20px; pxmargin-top: 20px">
+
+            <h4>name</h4>
+            <input ng-model="newBoard.name"/>
+            <br>
+            <h4>rank</h4>
+            <input ng-model="newBoard.rank"/>
+
+            <br>
+            <h4>description</h4>
+            <textarea class="dpTextarea" ng-model="newBoard.description">dp</textarea>
+            <br>
+            <h4>images</h4>
+            <textarea class="dpTextarea" ng-model ="newBoard.imageLinks[0]">link</textarea>
+            <br>
+            <h4>video</h4>
+            <textarea class="dpTextarea" ng-model ="newBoard.videoLink">link</textarea>
+            <br>
+            <button class="bueatyButton" ng-click="addNewBoard()">add new award</button>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+    var app = angular.module('myApp', []);
+    app.controller('boardController', function($scope,$http,$window, $location) {
+        $scope.kkll = "Home Page";
+        $scope.marketClick = function () {
+            alert('ok');
+            $window.location.href = $location.url() + "adminMain";
+        };
+        $scope.registrations = function () {
+            $window.location.href = $location.url() + "registrations";
+        };
+        $scope.dropClick = function () {
+            $window.location.href = $location.url() + "dropHandler";
+        }
+        $scope.vacateClick = function () {
+            $window.location.href = $location.url() + "absentHandler";
+        }
+        $scope.addClassClick = function () {
+            $window.location.href = $location.url() + "createClass";
+        }
+        $scope.statisClicker = function () {
+            $window.location.href = $location.url() + "adStatic";
+        }
+        $scope.settingClicker = function () {
+            $window.location.href = $location.url() + "adSetting";
+        }
+        $scope.hpMage = function () {
+            $window.location.href = $location.url() + "adHp";
+        }
+        $scope.awards = [];
+        $scope.boards = [];
+        $scope.newBoard = {id: 10086, name:'',type:'0',rank:'',description:'',imageLinks:[''],videoLink:''};
+
+        $scope.addNewBoard =function (){
+
+            $http.post('/api/addBoard', $scope.newBoard)
+                .then(function (respond)
+                {
+                    console.log(respond.data);
+                    $scope.newBoard = {id: 10086, name:'',type:'0',rank:'',description:'',imageLinks:[''],videoLink:''};
+                    $window.location.reload();
+                })
+                .catch(function (error){
+                    console.log(error);
+                })
+        }
+        $scope.updateBoard0 = function(id)
+        {
+            var target = {};
+            var found =false;
+            $scope.boards.forEach(function (board){
+                if(id.toString() === board.id.toString() && !found){
+                    target = board;
+                    found =true;
+                }
+            })
+            $http.post('/api/updateBoard', target)
+                .then(function (respond){
+                    alert(respond.data);
+                    $window.location.reload();
+                }).catch(function (error){
+                alert(error);
+            })
+
+        }
+        $scope.removeBoard0 = function (id)
+        {
+            var target = {};
+            var found =false;
+            $scope.boards.forEach(function (board){
+                if(id.toString() === board.id.toString() && !found){
+                    target = board;
+                    found =true;
+                }
+            })
+
+            $http.post("/api/removeBoard",target)
+                .then(function (respond){
+                    alert(respond.data);
+                    $window.location.reload();
+                }).catch(function (error){
+                alert(error);
+            })
+        }
+
+        $http.post('/api/getBoards',0)
+            .then(function (responds){
+                console.log(responds.data);
+                $scope.boards = responds.data;
+            })
+            .catch(function (error){
+                alert(error);
+            })
+
+
+    })
+
+
+
+</script>
+
+
+
+
+</body>
+</html>

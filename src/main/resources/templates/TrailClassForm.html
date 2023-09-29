@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trail Class Form</title>
+
+    <!--    <script type='text/javascript' src='angular.js'></script>-->
+    <!--    <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.3/ui-bootstrap.min.js"></script>-->
+    <!--    <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.3/ui-bootstrap-tpls.js"></script>-->
+    <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+    <title></title>
+    <style>
+        body{
+            /*margin-top:0px;*/
+            /*margin-left: 0px;*/
+            /*width: 2000px;*/
+            margin: 0; /* Remove default margin */
+            padding: 0; /* Remove default padding */
+            overflow-x: hidden; /* Prevent horizontal scrollbars */
+        }
+
+        .form3 input {
+            outline: 0;
+            border: 0;
+            padding: 8px;
+            background-color: #282828;
+            color: white;
+        }
+
+        .form3 input[type=submit] {
+            font-family: Helvetica, sans-serif;
+            /*text-transform: uppercase;*/
+            outline: 0;
+            background-image: linear-gradient(90deg,#FC0441,#F62DA8);
+            width: 100px;
+            border: 0;
+            padding: 8px;
+            color: #FFFFFF;
+            font-size: 13px;
+            /*-webkit-transition: all 0.3 ease;*/
+            /*transition: all 0.3 ease;*/
+            cursor: pointer;
+        }
+        /**{*/
+        /*    !*outline: solid #f00 1px !important;*!*/
+        /*    !*background: #000 !important;*!*/
+        /*    !*color: #fff !important;*!*/
+        /*    //width: 2000px;*/
+        /*}*/
+        .hero__video{
+            position: relative;
+            top: 0px;
+            object-fit: fill;
+            width: 100%;
+            height: 650px;
+        }
+        .mainVSourse{
+            object-fit: fill;
+            width: 100%;
+            height: 600px;
+        }
+        .mainBody
+        {
+            /*width: 100%;*/
+            height: 2500px;
+            /*position: absolute;*/
+            background-color: black;
+
+
+        }
+        .videoDiv{
+            position: relative;
+            top: 40px;
+            width: 100%;
+        }
+        .textOnVideo,.titleOnVideo
+        {
+            z-index: 10;
+            position: absolute;
+            margin-left: 100px;
+            float: left;
+            font-family:"Adobe Hebrew";
+
+            color: #FFFFFF;
+
+        }
+        .titleOnVideo{
+            top: 300px;
+            font-size: 100px;
+        }
+        .textOnVideo{
+            top: 460px;
+            font-size: 50px;
+        }
+        .buttonOnvVideo {
+            /*width: 100%;*/
+            z-index: 15;
+            position: absolute;
+
+            top: -10px;
+            color: white;
+
+        }
+        .headerDiv{
+            position: relative;
+            top:10px;
+            width: 100%;
+
+        }
+        .cb1,.cb2,.cb3,.cb4,.cb5
+        {
+            height: 400px;
+            width: 600px;
+            background:#ffffff;
+            margin-top: 20px;
+            margin-left: 10px;
+            float: left;
+            /*position: absolute;*/
+            border-radius: 25px ;
+            z-index: 0;
+            /*this tage indicate it list horienzentally */
+            /*display: inline-block;*/
+            overflow: hidden;
+        }
+        .cbBg{
+            width: 100%;
+            height: 100%;
+            border-radius: 25px ;
+            margin-top: 20px;
+            z-index: 0;
+            top: 630px;
+
+        }
+        .textOnboard{
+            position: absolute;
+            top: 100px;
+            z-index: 20;
+            color: #ffffff;
+            font-family:"Adobe Hebrew";
+            margin-left: 20px;
+        }
+
+        .textDp{
+            float: left;
+            width: 600px;
+            height: 400px;
+            margin-right: 20px;
+            margin-left: 50px;
+        }
+        .mainIntroBoard
+        {
+            position: relative;
+            top: 20px;
+            margin-left: 20px;
+            width: 100%;
+
+            height: 400px;
+        }
+        .currentClasses{
+            margin-top: 20px;
+            /*top: 1200px;*/
+            /*position: absolute;*/
+            margin-left: 20px;
+            position: relative;
+            top: 100px;
+            /*width: 100%;*/
+
+            height: 290px;
+        }
+        .currentClassesDiv{
+
+            margin-top: 20px;
+            margin-left: 20px;
+            /*width: 100%;*/
+
+            height: 180px;
+        }
+        .classIntroText{
+            font-family: "Adobe Hebrew";
+            color: white;
+        }
+        .headerTag{
+
+            display:inline-block;
+            width: 220px;
+            height:40px;
+            margin-left: 20px;
+            float: right;
+            position: relative;
+            top: 0px;
+        }
+        .ClassBoard{
+            position: relative;
+            left: 0px;
+            top: 40px;
+            margin-top: 50px;
+
+            margin-left: 0px;
+
+        }
+        .classInBoard{
+
+            display: inline-block;
+            height: 400px;
+            width: 560px;
+            background-color: blue;
+            margin-left: 40px;
+            text-align: center;
+
+        }
+        .classBoardTile{
+            font-family: "Adobe Hebrew";
+            white-space: pre-wrap; /* Add this line */
+            word-break: break-word; /* Add this line */
+            color: #FFFFFF;
+        }
+        .classBoardText{
+            color: #FFFFFF;
+            width: 540px;
+            height: 150px;
+            margin-left: 10px;
+            overflow:hidden;
+            /*background-color: #FFFFFF;*/
+            margin-top: -20px;
+            white-space: pre-wrap; /* Add this line */
+            word-break: break-word; /* Add this line */
+
+        }
+        .boardImg{
+            margin-top: -20px;
+            margin-left: 00px;
+            height: 200px;
+            width: 300px;
+
+        }
+
+        .bueatyButton
+        {
+            width: 100px;
+            height: 50px;
+            border-radius: 5px;
+            background: linear-gradient(#FFF886, #F072B6);
+        }
+        .selectCourseDic{
+            display: inline-block;
+            margin-left: 200px;
+            width: 200px;
+            height: 100px;
+            margin-top: -100px;
+        }
+        .formDiv{
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+            width: 100%;
+        }
+        .formInput{
+            margin-top: 10px;
+            border-radius: 4px;
+            border-color: aqua;
+            border-width: 1px;
+            width: 200px;
+            height: 50px;
+
+
+        }
+
+    </style>
+
+</head>
+
+
+<body ng-app="indexApp" ng-controller="indexCon">
+
+<div class="mainBody">
+
+
+    <div class="currentClasses" >
+
+
+
+        <div class="currentClassesDiv">
+            <h2 class="classIntroText">{{selectedCourse.name}}</h2>-->
+            <p class="classIntroText">address:&nbsp;&nbsp;&nbsp; {{selectedCourse.location}}</p>
+            <p class="classIntroText">time:&nbsp;&nbsp;&nbsp; {{selectedCourse.time}}</p>
+
+        </div><br><br>
+
+        <br><br>
+
+
+    </div>
+    <h2 style="color: #FFFFFF;margin-top: 20px" ng-model ="reminder"></h2>
+    <div class="formDiv">
+
+        <H4 style="color: white;margin-top: 20px">Name</H4>
+        <input  class="formInput" type="text" ng-model="applicant">
+        <H4 style="color: white; margin-top: 20px">Email</H4>
+        <input  class="formInput" type="email" ng-model="trailEmail">
+        <h4 style="color: white;margin-top: 20px">Number</h4>
+        <input class="formInput" type="text" ng-model="trailNumber">
+        <h4 style="color: white;margin-top: 20px">date</h4>
+        <input class="formInput" type="text" ng-model="date">
+        <br>
+        <button class="bueatyButton" ng-click="submitTrailClassApp()"> Submit </button>
+
+        <h2 style="color: #FFFFFF;margin-top: 20px">{{reminder}}</h2>
+    </div>
+    <h4 style="margin-left: 650px;margin-top: 240px; color: #90F7Ec; font-family: 'Bodoni MT'">This web app powered by Youhao Chen @ Charles W Davidson Engineering college SJSU </h4>
+    <script>
+
+
+        var app = angular.module('indexApp',[]);
+        app.controller('indexCon',function ($scope,$window,$location,$http, $interval){
+            $scope.indexItv = 1000;
+            $scope.test ='hello, this is test';
+            $scope.applicant="";
+            $scope.trailEmail="";
+            $scope.trailNumber="";
+            $scope.reminder = "";
+            $scope.date ="";
+            $scope.reminder="please fill the form";
+
+            $scope.signIn = function ()
+            {
+                $window.location.href = $location.url() + "signIn";
+            };
+
+            $scope.courses = [];
+            $scope.selectedCourse = {name:'',location:'',time:''};
+            $http.get('/api/showAbleCourses')
+                .then(function (respond){
+
+                    $scope.courses = respond.data;
+                    console.log($scope.courses);
+                    console.log($scope.courses);
+
+                    var params = "";
+                    params =$location.absUrl();
+                    var value = params.split("=")[1];
+                    $scope.id = value;
+                    console.log($scope.id);
+
+
+
+                    $scope.courses.forEach(function(course) {
+                        console.log(course.c_id.toString());
+                        if (course.c_id.toString() === $scope.id) {
+                            $scope.selectedCourse.name = course.name;
+                            $scope.selectedCourse.time = course.time;
+                            $scope.selectedCourse.location = course.location;
+                            // Perform further actions with the matching course
+                        }
+                    });
+
+                })
+                .catch(function (error){
+                    console.log(error);
+                })
+
+
+
+            var params = "";
+            params =$location.absUrl();
+            var value = params.split("=")[1];
+            $scope.id = value;
+            console.log($scope.id);
+
+            console.log($scope.selectedCourse);
+            $scope.submitTrailClassApp= function ()
+            {
+                $scope.reminder ="we sent a confirmation email to your email address.Please show this email to our coach when you attend the class."
+                var data ={
+                    applicant: $scope.applicant,
+                    email: $scope.trailEmail,
+                    number:$scope.trailNumber,
+                    class_id: $scope.id,
+                    date: $scope.date
+                };
+                $http.post('/api/postTrailApp',data)
+                    .then(function (responds){
+                        console.log(responds.data);
+
+                    }).catch(function (error){
+                        console.log('error');
+                })
+            }
+
+
+        });
+
+    </script>
+</div>
+</body>
+</html>
+
+
+
+

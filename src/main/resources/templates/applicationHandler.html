@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div style="height: 100px">
+  <form th:action="student_main.html" th:object="${aUser}">
+
+    <h4>Current User</h4>
+    <h4 th:text = "${aUser.name}"></h4>
+  </form>
+</div>
+
+  <div class="grid_div" th:object = "${dates}">
+    <table border="1"  id="hidden-table-info">
+      <thead>
+      <tr>
+        <th>classid</th>
+        <th>user_id</th>
+        <th>userName</th>
+        <th>payment</th>
+        <th>application date</th>
+        <th></th>
+
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="li_style" th:each="class, iStat: ${classList}">
+        <td th:text="${class.class_id}"></td>
+        <td th:text="${class.user_id}"></td>
+        <td th:text="${class.username}"></td>
+        <td th:text="${class.price}"></td>
+        <td th:text="${class.app_date}"></td>
+        <td th:text="${class.orderCount}"></td>
+<!--        <td><input type="checkbox" name = "selectIds" th:value="${class.class_id}${class.user_id}"/></td>-->
+
+          <td>
+            <form th:object="${class}" th:action="appAprove">
+                <input name="class_id" th:value="${class.class_id}" type="hidden"/>
+                <input name="class_id" th:value="${class.user_id}" type="hidden"/>
+                <input name ="index" th:value="${iStat.index}" />
+
+<!--              <input th:object="${class}" name = "class"/>-->
+              <input type="submit" value="approve" />
+            </form>
+          </td>
+
+
+        <form th:object="${class}" th:action="appDecline">
+          <input name ="index" th:value="${iStat.index}" />
+          <td><input type="submit" value="decline" ></td>
+        </form>
+
+
+
+      </tr>
+      </tbody>
+    </table>
+<!--    <input width="500px" height="200px" type="search" name="comment" value="text comment"/>-->
+<!--    <br><br><input type="submit" value="Submit the selections and comment" />-->
+
+    <h4>reminder:</h4>
+    <p th:text="${reminder}"></p>
+  </div>
+</form>
+
+</body>
+</html>

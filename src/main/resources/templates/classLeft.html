@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>course pick up</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
+    <style>
+        .bueatyButton
+        {
+            width: 100px;
+            height: 50px;
+            border-radius: 5px;
+            background: linear-gradient(#FFF886, #F072B6);
+        }
+        .listElement {
+            width: 80px;
+            height: 30px;
+            background-color: darkblue; /* Optional: Set a background color */
+            /* Additional styles or properties can be added as needed */
+        }
+    </style>
+</head>
+<body ng-app="indexApp" ng-controller="indexCon">
+<p>When is the first class</p>
+<input type="text" ng-model="startDate" uib-datepicker-popup="MM/dd/yyyy" is-open="datePickerOpen" datepicker-options="dateOptions" close-text="Close" />
+<button type="button"  ng-click="openDatePicker()"><i class="glyphicon glyphicon-calendar"></i></button>
+
+<p>class id</p>
+<input ng-model = "class_id"/>
+<p>how many classes purchased</p>
+<input ng-model="numOfClass"/>
+<br><br><br><br>
+<button class="bueatyButton" ng-click="submit()">submit</button>
+
+<!--<p>how many classes have been canceled </p>-->
+<!--<input />-->
+<div style="text-wrap: normal" ng-show="showResult">
+<br><br><br>
+<p>today</p>
+<p>{{today}}</p>
+<p>result: </p>
+<p>{{cl}}</p>
+<p>End date</p>
+<p>{{endDate}}</p>
+<p>left class</p>
+<div style="margin-top: 20px" ng-repeat="date in result.restClassDate">
+<p>{{ date }}</p>
+</div>
+</div>
+
+
+<script>
+  var app = angular.module('indexApp',['ui.bootstrap']);
+  app.controller('indexCon',function ($scope,$window,$location,$http, $interval){
+    $scope.result = {class_id:0,restClasses:0,endDate:'',restClassDate:[],allClasses:[]};
+    $scope.showResult = false;
+    $scope.currentDay = new Date();
+    $scope.today = formatDate($scope.currentDay);
+    $scope.cl = 0;
+    $scope.class_id = 0;
+    $scope.request ={};
+    $scope.numOfClass = 0;
+    $http.post('/testClassLeft')
+
+    $scope.submit = function ()
+    {
+        $scope.request = {class_id:$scope.class_id, start: $scope.startDate,paidClasses:$scope.numOfClass};
+        console.log($scope.request);
+        $http.post('/testClassLeft',$scope.request)
+            .then(function(respond){
+
+                if(respond.status === 200)
+                {
+                    $scope.result = respond.data;
+                    $scope.cl = $scope.result.restClasses;
+                    $scope.endDate=$scope.result.endDate;
+
+                    $scope.showResult = true;
+
+                    console.log(respond.data);
+                }else {
+                    alert("class_id or start date error, please re-enter");
+                }
+
+            }).catch(function (error){
+                console.log(error);
+                alert("class_id or start date error, please re-enter");
+
+        })
+
+    }
+
+    $scope.signIn = function ()
+    {
+      $window.location.href = $location.url() + "signIn";
+    };
+
+    $scope.classLeft = function (){
+      $window.location.href = $location.url()+"classLeft";
+    }
+
+    $scope.homePage = function ()
+    {
+      $window.location.href = $location.url() + "index";
+    }
+
+    $scope.startDate = new Date(); // Initialize the start date
+    $scope.datePickerOpen = false; // Initialize the date picker to be closed
+    $scope.dateOptions = {
+      formatYear: 'yyyy',
+      startingDay: 1,
+
+    };
+
+    function formatDate (date)
+    {
+        var mm = date.getMonth() + 1; // Month is zero-based
+        var dd = date.getDate();
+        var yyyy = date.getFullYear();
+        return mm + '/' + dd + '/' + yyyy;
+    }
+
+    $scope.openDatePicker = function () {
+        console.log("Function openDatePicker() called.");
+        $scope.datePickerOpen = true;
+
+    };
+    // $http.post('/api/TrailClassForm',course.c_id)
+    //     .then(function (respond){
+    //         console.log(respond);
+    //         $window.location.href = '/trailClassForm?id=' + course.c_id;
+    //     }).catch(function (error){
+    //         console.log(error)
+    // })
+
+  });
+</script>
+
+</body>
+
+
+</html>

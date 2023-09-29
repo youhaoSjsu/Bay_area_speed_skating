@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Awards</title>
+
+  <!--    <script type='text/javascript' src='angular.js'></script>-->
+  <!--    <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.3/ui-bootstrap.min.js"></script>-->
+  <!--    <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.3/ui-bootstrap-tpls.js"></script>-->
+  <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+  <title></title>
+  <style>
+    body{
+      /*margin-top:0px;*/
+      /*margin-left: 0px;*/
+      /*width: 2000px;*/
+      margin: 0; /* Remove default margin */
+      padding: 0; /* Remove default padding */
+      overflow-x: hidden; /* Prevent horizontal scrollbars */
+    }
+
+    .form3 input {
+      outline: 0;
+      border: 0;
+      padding: 8px;
+      background-color: #282828;
+      color: white;
+    }
+
+    .form3 input[type=submit] {
+      font-family: Helvetica, sans-serif;
+      /*text-transform: uppercase;*/
+      outline: 0;
+      background-image: linear-gradient(90deg,#FC0441,#F62DA8);
+      width: 100px;
+      border: 0;
+      padding: 8px;
+      color: #FFFFFF;
+      font-size: 13px;
+      /*-webkit-transition: all 0.3 ease;*/
+      /*transition: all 0.3 ease;*/
+      cursor: pointer;
+    }
+    /**{*/
+    /*    !*outline: solid #f00 1px !important;*!*/
+    /*    !*background: #000 !important;*!*/
+    /*    !*color: #fff !important;*!*/
+    /*    //width: 2000px;*/
+    /*}*/
+    .hero__video{
+      position: relative;
+      top: 0px;
+      object-fit: fill;
+      width: 100%;
+      height: 650px;
+    }
+    .mainVSourse{
+      object-fit: fill;
+      width: 100%;
+      height: 600px;
+    }
+    .mainBody
+    {
+      /*width: 100%;*/
+      height: 4000px;
+      /*position: absolute;*/
+      background-color: black;
+
+
+    }
+    .videoDiv{
+      position: relative;
+      top: 40px;
+      width: 100%;
+    }
+    .textOnVideo,.titleOnVideo
+    {
+      z-index: 10;
+      position: absolute;
+      margin-left: 100px;
+      float: left;
+      font-family:"Adobe Hebrew";
+
+      color: #FFFFFF;
+
+    }
+    .titleOnVideo{
+      top: 300px;
+      font-size: 100px;
+    }
+    .textOnVideo{
+      top: 460px;
+      font-size: 50px;
+    }
+    .buttonOnvVideo {
+      /*width: 100%;*/
+      z-index: 15;
+      position: absolute;
+
+      top: -10px;
+      color: white;
+
+    }
+    .headerDiv{
+      position: relative;
+      top:10px;
+      width: 100%;
+
+    }
+    .cb1,.cb2,.cb3,.cb4,.cb5
+    {
+      height: 400px;
+      width: 600px;
+      background:#ffffff;
+      margin-top: 20px;
+      margin-left: 10px;
+      float: left;
+      /*position: absolute;*/
+      border-radius: 25px ;
+      z-index: 0;
+      /*this tage indicate it list horienzentally */
+      /*display: inline-block;*/
+      overflow: hidden;
+    }
+    .cbBg{
+      width: 100%;
+      height: 100%;
+      border-radius: 25px ;
+      margin-top: 20px;
+      z-index: 0;
+      top: 630px;
+
+    }
+    .textOnboard{
+      position: absolute;
+      top: 100px;
+      z-index: 20;
+      color: #ffffff;
+      font-family:"Adobe Hebrew";
+      margin-left: 20px;
+    }
+
+    .textDp{
+      float: left;
+      width: 900px;
+      height: 400px;
+      margin-right: 20px;
+      margin-left: 50px;
+    }
+
+    .mainIntroBoard
+    {
+      position: relative;
+      top: 20px;
+      margin-left: 20px;
+      width: 100%;
+
+      height: 400px;
+    }
+    .currentClasses{
+      margin-top: 20px;
+      /*top: 1200px;*/
+      /*position: absolute;*/
+      margin-left: 20px;
+      position: relative;
+      top: 100px;
+      /*width: 100%;*/
+
+      height: 290px;
+    }
+    .currentClassesDiv{
+
+      margin-top: 20px;
+      margin-left: 20px;
+      /*width: 100%;*/
+
+      height: 180px;
+    }
+    .classIntroText{
+      font-family: "Adobe Hebrew";
+      color: white;
+    }
+    .headerTag{
+
+      display:inline-block;
+      width: 220px;
+      height:40px;
+      margin-left: 20px;
+      float: right;
+      position: relative;
+      top: 0px;
+    }
+
+
+    .bueatyButton
+    {
+      width: 100px;
+      height: 50px;
+      border-radius: 5px;
+      background: linear-gradient(#FFF886, #F072B6);
+    }
+    .awardList{
+      top: 40px;
+      position: relative;
+      display: list-item;
+      margin-top: 50px;
+    }
+    .awardBoard{
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* 3 equal-width columns */
+      grid-gap: 10px;
+      margin-top: 20px;
+      width: 1315px;
+      height: 405px;
+    }
+    .awardImages{
+
+      width: 605px;
+      height: 405px;
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* 3 equal-width columns */
+      grid-gap: 10px;
+      margin-top: 20px;
+    }
+    .awardImage{
+      width: 300px;
+      height: 200px;
+      border-radius: 10px;
+      border-width: 1px;
+      float: left;
+
+
+    }
+    .awardTextDp{
+      float: left;
+      width: 700px;
+      height: 405px;
+      margin-right: 20px;
+      margin-left: 50px;
+
+    }
+
+    p{
+      color: #FFFFFF;
+    }
+    h1,h2,h3,h4{
+      color: #FFFFFF;
+    }
+  </style>
+
+</head>
+
+
+<body ng-app="indexApp" ng-controller="indexCon">
+
+<div class="mainBody">
+  <div class="headerDiv">
+    <div  style="width: 150px;   ">
+      <form  class ="buttonOnvVideo" th:action="signIn">
+        <!--            <h4 style="margin-left: -1500px;margin-top: 10px">Powered by Youhao Chen at Charles W Davidson Engineering college SJSU</h4>-->
+
+        <div class="headerTag">
+          <h3 class="buttonOnvVideo">Why speed Skating?</h3>
+        </div>
+        <div class="headerTag" ng-click ="ourAwards()">
+          <h3 class="buttonOnvVideo" >Our awards</h3>
+        </div>
+        <div class="headerTag">
+          <h3 class="buttonOnvVideo" ng-click="ourCoaches()">Coaches</h3>
+        </div>
+
+        <div class="headerTag">
+          <h3 class="buttonOnvVideo" ng-click="homePage()">home page</h3>
+        </div>
+
+
+
+        <div ng-click ="signIn()" class="headerTag">
+          <img style="margin-left: -24px;margin-top: 10px; width: 20px;height: 20px" src="/pics/add.png">
+          <h3  class="buttonOnvVideo" >SignIn & SignUp</h3>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+
+  <div style="align-items: center; top:40px;position:relative;display: flex; flex-direction: column;: center;width: 100%;height: 64px">
+    <h1 style="color: gold">Coaches </h1>
+    <p style="color: gold">Our coach will update when new coach join us</p>
+  </div>
+
+  <div class="awardList">
+
+    <div class="awardBoard" ng-repeat="slide in slides">
+
+      <div class="awardImages" >
+          <img class="awardImage" ng-src="{{slide.imageLink}}" />
+      </div>
+      <div class="awardTextDp">
+        <H2>{{slide.name}}</H2>
+        <p>{{slide.description}}</p>
+      </div>
+
+
+    </div>
+  </div>
+
+  <h4 style="margin-left: 650px;margin-top: 240px; color: #90F7Ec; font-family: 'Bodoni MT'">This web app powered by Youhao Chen @ Charles W Davidson Engineering college SJSU </h4>
+</div>
+<script>
+
+  var app = angular.module('indexApp',[]);
+  app.controller('indexCon',function ($scope,$window,$location,$http, $interval){
+    $scope.indexItv = 1000;
+
+
+    var slides = $scope.slides = [];
+    $http.get('/api/getCoaches')
+            .then(function (responds) {
+              console.log(responds.data);
+              $scope.slides = responds.data;
+              slides = $scope.slides;
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+
+
+    $scope.currentIndex = 0;
+    $scope.theImageQueue = [];
+
+    $interval(function (){
+      $scope.currentIndex = ($scope.currentIndex+1) % $scope.slides.length;
+    },8000);
+
+    $scope.homePage = function ()
+    {
+      $window.location.href = $location.url() + "index";
+    }
+    $scope.signIn = function ()
+    {
+      $window.location.href = $location.url() + "signIn";
+    };
+    $scope.ourCoaches = function ()
+    {
+      $window.location.href = $location.url() + "ourCoaches";
+    }
+
+
+
+
+  });
+</script>
+</div>
+</body>
+</html>

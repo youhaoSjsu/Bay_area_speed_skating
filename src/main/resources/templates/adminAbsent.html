@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="grid_div" >
+  <div style="height: 100px">
+    <form th:action="student_main.html" th:object="${aUser}">
+
+      <h4>Current User</h4>
+      <h4 th:text = "${aUser.name}"></h4>
+    </form>
+  </div>
+
+  <table border="1"  id="hidden-table-info">
+    <thead>
+    <tr>
+      <th>class_id</th>
+      <th>user_id</th>
+      <th>referDate</th>
+      <th>absent date</th>
+      <th>makeUp date</th>
+
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="li_style" th:each="class, iStat: ${absentList}">
+      <td th:text="${class.class_id}"></td>
+      <td th:text="${class.user_id}"></td>
+      <td th:text="${class.referDate}"></td>
+      <td th:text="${class.absentDate}"></td>
+      <td th:text="${class.makeUpDate}"></td>
+
+      <!--        <td><input type="checkbox" name = "selectIds" th:value="${class.class_id}${class.user_id}"/></td>-->
+
+    </tr>
+    </tbody>
+  </table>
+  <!--    <input width="500px" height="200px" type="search" name="comment" value="text comment"/>-->
+  <!--    <br><br><input type="submit" value="Submit the selections and comment" />-->
+
+<!--  <h4>reminder:</h4>-->
+<!--  <p th:text="${reminder}"></p>-->
+</div>
+</form>
+
+
+
+</body>
+</html>

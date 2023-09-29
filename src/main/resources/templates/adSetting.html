@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>cancel classes</title>
+    <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+</head>
+<body ng-app="cancelClassApp" ng-controller="cancelClassCon">
+<div style="height: 100px">
+    <form th:action="student_main.html" th:object="${aUser}">
+
+        <h4>Current User</h4>
+        <h4 th:text = "${aUser.name}"></h4>
+    </form>
+</div>
+<h2>delete classes</h2>
+<div class="grid_div" >
+
+    <table border="1"   ng-repeat="course in classArr" id="hidden-table-info">
+        <thead>
+        <tr>
+            <th>classid</th>
+            <th>class name</th>
+            <th>time</th>
+            <th>State</th>
+            <th>Disable Show</th>
+            <th>Enable Show</th>
+            <th>delete</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="li_style">
+
+            <td>{{course.c_id}}</td>
+            <td>{{course.name}}</td>
+            <td>{{course.time}}</td>
+            <td>{{course.showEnable}}</td>
+            <td><button ng-click="disable(course.c_id)" style="color: greenyellow">disable</button></td>
+            <td><button ng-click="enable(course.c_id)" style="color: blue">enable</button></td>
+            <td><button ng-click="delete(course.c_id)" style="color: red">delete</button></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    var app = angular.module('cancelClassApp',[])
+    app.controller('cancelClassCon',function ($scope,$window,$http){
+        $scope.classArr = []
+        $scope.reminder = '';
+        $http.get('/api/classList')
+            .then(function (respond) {
+                $scope.classArr = respond.data;
+                console.log(respond);
+
+            })
+            .catch(function (error){
+                console.log('error');
+                alert('error');
+            })
+
+        if($scope.classArr.length<1){
+            $scope.reminder = "there's no classes in the database, try add one";
+        }
+        $scope.disable = function (id){
+            $http.post('/api/disableShow',id,{ responseType: 'text' })
+                .then(function (respond){
+                    alert(respond.data);
+                    $window.location.reload();
+                })
+                .catch(function (error){
+                    console.log(error);
+                })
+        }
+        $scope.enable = function (id){
+            $http.post('/api/enableShow',id,{ responseType: 'text' })
+                .then(function (respond){
+                    alert(respond.data);
+                    $window.location.reload();
+                })
+                .catch(function (error){
+                    console.log(error);
+                })
+
+        }
+        $scope.delete = function (id){
+            $http.post('/api/deleteClass',id,{responseType: 'text'})
+                .then(function (respond){
+                    alert(respond.data());
+                    $window.location.reload();
+                })
+                .catch(function (error){
+                    alert(error);
+                })
+        }
+    })
+
+</script>
+
+</body>
+</html>
