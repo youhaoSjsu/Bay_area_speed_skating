@@ -11,18 +11,6 @@ public class RestClassRespond {
     String[] restClassDate;
     String [] allClasses;
 
-//    public RestClassRespond(int class_id, int restClasses, Date endDate, Date[] restClassDate) {
-//        this.class_id = class_id;
-//        this.restClasses = restClasses;
-//        this.endDate = endDate;
-//        this.restClassDate = restClassDate;
-//    }
-    public RestClassRespond(int class_id, int restClasses, String endDate) {
-        this.class_id = class_id;
-        this.restClasses = restClasses;
-        this.endDate = endDate;
-        this.restClassDate = null;
-    }
 
     public RestClassRespond() {
     }
@@ -65,5 +53,13 @@ public class RestClassRespond {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public String[] getAllClasses() {
+        return allClasses;
+    }
+
+    public void setAllClasses(String[] allClasses) {
+        this.allClasses = allClasses;
     }
 }

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--microservice.html-->
 <head>
   <meta charset="UTF-8">
-  <title>Awards</title>
+  <title>Bay area Skating club</title>
 
   <!--    <script type='text/javascript' src='angular.js'></script>-->
   <!--    <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.3/ui-bootstrap.min.js"></script>-->
@@ -41,58 +42,18 @@
       /*transition: all 0.3 ease;*/
       cursor: pointer;
     }
-    /**{*/
-    /*    !*outline: solid #f00 1px !important;*!*/
-    /*    !*background: #000 !important;*!*/
-    /*    !*color: #fff !important;*!*/
-    /*    //width: 2000px;*/
-    /*}*/
-    .hero__video{
-      position: relative;
-      top: 0px;
-      object-fit: fill;
-      width: 100%;
-      height: 650px;
-    }
-    .mainVSourse{
-      object-fit: fill;
-      width: 100%;
-      height: 600px;
-    }
+
     .mainBody
     {
       /*width: 100%;*/
-      margin-top: -50px;
-      height: 4000px;
+      height: 2500px;
       /*position: absolute;*/
       background-color: black;
 
 
     }
-    .videoDiv{
-      position: relative;
-      top: 40px;
-      width: 100%;
-    }
-    .textOnVideo,.titleOnVideo
-    {
-      z-index: 10;
-      position: absolute;
-      margin-left: 100px;
-      float: left;
-      font-family:"Adobe Hebrew";
 
-      color: #FFFFFF;
 
-    }
-    .titleOnVideo{
-      top: 300px;
-      font-size: 100px;
-    }
-    .textOnVideo{
-      top: 460px;
-      font-size: 50px;
-    }
     .buttonOnvVideo {
       /*width: 100%;*/
       z-index: 15;
@@ -108,79 +69,7 @@
       width: 100%;
 
     }
-    .cb1,.cb2,.cb3,.cb4,.cb5
-    {
-      height: 400px;
-      width: 600px;
-      background:#ffffff;
-      margin-top: 20px;
-      margin-left: 10px;
-      float: left;
-      /*position: absolute;*/
-      border-radius: 25px ;
-      z-index: 0;
-      /*this tage indicate it list horienzentally */
-      /*display: inline-block;*/
-      overflow: hidden;
-    }
-    .cbBg{
-      width: 100%;
-      height: 100%;
-      border-radius: 25px ;
-      margin-top: 20px;
-      z-index: 0;
-      top: 630px;
 
-    }
-    .textOnboard{
-      position: absolute;
-      top: 100px;
-      z-index: 20;
-      color: #ffffff;
-      font-family:"Adobe Hebrew";
-      margin-left: 20px;
-    }
-
-    .textDp{
-      float: left;
-      width: 900px;
-      height: 400px;
-      margin-right: 20px;
-      margin-left: 50px;
-    }
-
-    .mainIntroBoard
-    {
-      position: relative;
-      top: 20px;
-      margin-left: 20px;
-      width: 100%;
-
-      height: 400px;
-    }
-    .currentClasses{
-      margin-top: 20px;
-      /*top: 1200px;*/
-      /*position: absolute;*/
-      margin-left: 20px;
-      position: relative;
-      top: 100px;
-      /*width: 100%;*/
-
-      height: 290px;
-    }
-    .currentClassesDiv{
-
-      margin-top: 20px;
-      margin-left: 20px;
-      /*width: 100%;*/
-
-      height: 180px;
-    }
-    .classIntroText{
-      font-family: "Adobe Hebrew";
-      color: white;
-    }
     .headerTag{
 
       display:inline-block;
@@ -191,53 +80,6 @@
       position: relative;
       top: 0px;
     }
-
-
-    .bueatyButton
-    {
-      width: 100px;
-      height: 50px;
-      border-radius: 5px;
-      background: linear-gradient(#FFF886, #F072B6);
-    }
-    .awardList{
-      display: list-item;
-      margin-top: 50px;
-    }
-    .awardBoard{
-      display: grid;
-      grid-template-columns: 1fr 1fr; /* 3 equal-width columns */
-      grid-gap: 10px;
-      margin-top: 20px;
-      width: 1315px;
-      height: 405px;
-    }
-    .awardImages{
-
-      width: 605px;
-      height: 405px;
-      display: grid;
-      grid-template-columns: 1fr 1fr; /* 3 equal-width columns */
-      grid-gap: 10px;
-      margin-top: 20px;
-    }
-    .awardImage{
-      width: 300px;
-      height: 200px;
-      border-radius: 10px;
-      border-width: 1px;
-      float: left;
-
-
-    }
-    .awardTextDp{
-      float: left;
-      width: 700px;
-      height: 405px;
-      margin-right: 20px;
-      margin-left: 50px;
-
-    }
     .listView{
       position: relative;
       top:100px;
@@ -245,8 +87,6 @@
       width: 100%;
       align-items: center;
       flex-direction: column;
-
-
     }
     .msButton{
       text-align: center; align-items: center; flex-direction: column; width: 100%;height: 80px;
@@ -255,25 +95,52 @@
     .msButton:hover{
       background-color: #32CCBC;
     }
-
-
-    p{
-      color: #FFFFFF;
-    }
-    h1,h2,h3,h4{
-      color: #FFFFFF;
-    }
+  h2{
+    color: #FAEBD7;
+  }
   </style>
 
 </head>
 
 
-<body ng-app="indexApp" ng-controller="indexCon">
+<body ng-app="indexApp" ng-controller="indexCon" >
 
 <div class="mainBody">
+  <div class="headerDiv">
+    <div  style="width: 150px;   ">
+      <form  class ="buttonOnvVideo" th:action="signIn">
 
+        <div class="headerTag" ng-click="microService()">
+          <h3 class="buttonOnvVideo"> microService</h3>
+        </div>
+        <div class="headerTag" ng-click ="ourAwards()">
+          <h3 class="buttonOnvVideo" >Our awards</h3>
+        </div>
+        <div class="headerTag" ng-click="ourCoaches()">
+          <h3 class="buttonOnvVideo" >Coaches</h3>
+        </div>
+        <div ng-click ="scrollToId('indexCurrentClasses')"class="headerTag">
+          <h3 class="buttonOnvVideo">Classes</h3>
+        </div>
+        <div ng-click ="whyUs()" class="headerTag">
+          <img style="margin-left: -24px;margin-top: 10px; width: 20px;height: 20px" src="/pics/club.png">
+          <h3  class="buttonOnvVideo" >why join us</h3>
+        </div>
+
+
+
+        <div ng-click ="signIn()" class="headerTag">
+          <img style="margin-left: -24px;margin-top: 10px; width: 20px;height: 20px" src="/pics/add.png">
+          <h3  class="buttonOnvVideo" >SignIn & SignUp</h3>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
 
   <div class="listView">
+
     <div class="msButton"  ng-click="classLeft()">
       <h2 >How many classes I have</h2>
     </div>
@@ -303,9 +170,55 @@
       $window.location.href = $location.url() + "index";
     }
 
+    $scope.ourAwards = function (){
+      $window.location.href = $location.url() + "ourAward";
+    }
+    $scope.microService =function () {
+      $window.location.href = $location.url() + "microservice";
+    }
+
+    $scope.signIn = function ()
+    {
+      $window.location.href = $location.url() + "signIn";
+    }
+
+    $scope.ourCoaches = function ()
+    {
+      $window.location.href = $location.url() + "ourCoaches";
+    }
+    $scope.whyUs = function ()
+    {
+      $window.location.href = $location.url() + "whyUs";
+    }
+
+
 
   });
 </script>
+
+
+  <script>
+    window.onload = function () {
+
+      var element_obj = document.getElementById("wrapper");
+      var heigth_screen = window.screen.height;
+      var width_screen = window.screen.width;
+      heigth_screen = heigth_screen * 1;
+      element_obj.style.height = heigth_screen + "px";
+      width_screen = width_screen * 1;
+      element_obj.style.width = width_screen + "px";
+    };
+  </script>
 </div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>cancel a class</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
+    <style>
+        .bueatyButton
+        {
+            width: 100px;
+            height: 50px;
+            border-radius: 5px;
+            background: linear-gradient(#FFF886, #F072B6);
+        }
+    </style>
+</head>
+<body>
+<div ng-app="indexApp" ng-controller="indexCon" align="top">
+    <p>class name</p>
+    <input ng-model="className"/>
+    <p>Date</p>
+    <input type="text" ng-model="classDate" uib-datepicker-popup="MM/dd/yyyy" is-open="datePickerOpen" datepicker-options="dateOptions" close-text="Close" />
+    <button type="button"  ng-click="openDatePicker()"><i class="glyphicon glyphicon-calendar"></i></button>
+
+    <p>reason</p>
+    <input ng-model="reason">
+
+    <button class="bueatyButton" ng-click="submit()">submit</button>
+
+
+
+</div>
+<script>
+    var app = angular.module('indexApp',['ui.bootstrap']);
+    app.controller('indexCon',function ($scope,$window,$location,$http, $interval){
+
+        $scope.className = '';
+        $scope.reason = '';
+
+
+        $scope.classDate = new Date(); // Initialize the start date
+        $scope.datePickerOpen = false; // Initialize the date picker to be closed
+        $scope.dateOptions = {
+            formatYear: 'yyyy',
+            startingDay: 1,
+
+        };
+        $scope.openDatePicker = function () {
+            console.log("Function openDatePicker() called.");
+            $scope.datePickerOpen = true;
+
+        };
+        $scope.submit = function ()
+        {
+            $scope.request = {className:$scope.className, date: $scope.classDate,reason: $scope.reason};
+            console.log($scope.request);
+            $http.post('/api/recordACancel',$scope.request)
+                .then(function(respond){
+
+                    if(respond.status === 200)
+                    {
+                       alert('class canceled');
+                    }
+
+                }).catch(function (error){
+                console.log(error);
+                alert("className or date error, please re-enter");
+
+            })
+
+        }
+    })
+
+</script>
+</body>
+</html>

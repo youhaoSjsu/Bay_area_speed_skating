@@ -137,7 +137,7 @@ public class mainCont {
 
             Course aCourse = new Course((Integer) m.get("class_id"), (String) m.get("teacher"), (String) m.get("location"), (String) m.get("time"), (String) m.get("class_name"), (Double) m.get("price"),(Integer)m.get("showEnable"));
             aCourse.setTime((String)m.get("time"));
-            aCourse.setNc((Integer) m.get("classCount"));
+            aCourse.setClassCount((Integer) m.get("classCount"));
             try{
                 aCourse.setDescription(m.get("description").toString());
             }catch (Exception e)
@@ -147,7 +147,7 @@ public class mainCont {
 
             if(m.get("startDate")!= null)
             {
-                aCourse.setsTime(m.get("startDate").toString());
+                aCourse.setStartDate(m.get("startDate").toString());
             }
             courseList.add(aCourse);
 
@@ -186,7 +186,7 @@ public class mainCont {
     @RequestMapping(value="/index",method = RequestMethod.GET)
     public ModelAndView mainPage()
     {
-        ModelAndView mv  =new ModelAndView("index.html");
+        ModelAndView mv  =new ModelAndView("indexv1.html");
 
         return mv;
     }
@@ -356,27 +356,29 @@ public void getStuImage(HttpServletRequest request, HttpServletResponse response
         subject = "You have ordered a Trail Class";
         content ="Thank You for registering our class, please read below text before you come. <br> address: <br> "+target.getLocation()+" <br>time:<br>"+target.getTime()+"("+trailClassAppRequest.getDate()+")"+ "<br> Notes: <br>"+target.getDescription();
         content += "Thank you.<br>";
-        if(!target.getMode().equals("unknown"))
+        if(!target.getMode_of_instruction().equals("unknown"))
         {
-            content+="<br> please note that the class is a <h2>"+target.getMode()+"</h2>";
+            content+="<br> please note that the class is a <h2>"+target.getMode_of_instruction()+"</h2>";
         }
         to = trailClassAppRequest.getTrailEmail();
         String result = sendEmail(to,subject,content);
         subject = "You have recieved a new trail student";
-        content = "You have recieved a new trial class <br> date: <br>"+ trailClassAppRequest.getDate()+"<br> student name:"+trailClassAppRequest.getApplicant()+"<br> number <br>"+trailClassAppRequest.getNumber()+"<br> on class:"+ target.getName();
+        content = "You have recieved a new trial class <br> date: <br>"+ trailClassAppRequest.getDate()+"<br> student name:"+
+                trailClassAppRequest.getApplicant()+"<br> number <br>"+trailClassAppRequest.getNumber()+"<br> on class:"+
+                target.getClass_name();
         to = "bayarea.skatingclub@gmail.com";
         String adminNotice = sendEmail(to,subject,content);
         if(result.equals("Email sent successfully"))
         {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.TEXT_PLAIN);
-            return new ResponseEntity<>("success registered the trailClass " + target.getName(), headers, HttpStatus.OK);
+            return new ResponseEntity<>("success registered the trailClass " + target.getClass_name(), headers, HttpStatus.OK);
         }
         else
         {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.TEXT_PLAIN);
-            return new ResponseEntity<>("Fail to register current class:  " + target.getName()+" please contact our sales: 4088889452", headers, HttpStatus.OK);
+            return new ResponseEntity<>("Fail to register current class:  " + target.getClass_name()+" please contact our sales: 4088889452", headers, HttpStatus.OK);
         }
 
     }
@@ -408,7 +410,6 @@ public void getStuImage(HttpServletRequest request, HttpServletResponse response
 
             Date end =c.getTime();
 
-
             String sql = "select c.time, cc.date from classcanceled as cc join classes as c on c.class_id = cc.class_id  where cc.class_id = (?) and date>= (?) and date <= (?)";
             List<Map<String,Object>> list = jdbcTemplate.queryForList(sql, class_id,start,end);
             Date []dArray = new Date[list.size()];
@@ -437,7 +438,15 @@ public void getStuImage(HttpServletRequest request, HttpServletResponse response
             List<String> classes = generateDateSchedule(ss,rr.getPaidClasses(), day, dArray);
             List<String > classLeft = filterDates(classes,se);
             String [] arr = classLeft.toArray(new String[0]);
-            RestClassRespond respond = new RestClassRespond(class_id,classLeft.size(),classLeft.get(classLeft.size()-1),arr,classes.toArray(new String[0]));
+            String lastDate = "";
+            int lastIndex = 0;
+            //if the classes left <0 means the end date is befor today so the class list should be split
+            if(classLeft.size()==0)
+            {
+                classes = classes.subList(0,Math.min(classes.size(),rr.getPaidClasses()));
+                lastDate = classes.get(classes.size()-1);
+            }
+            RestClassRespond respond = new RestClassRespond(class_id,classLeft.size(),lastDate,arr,classes.toArray(new String[0]));
             return ResponseEntity.ok(respond);
 
         }catch (Exception e)

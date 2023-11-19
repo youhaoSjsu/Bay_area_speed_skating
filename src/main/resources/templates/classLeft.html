@@ -44,10 +44,15 @@
 <p>{{cl}}</p>
 <p>End date</p>
 <p>{{endDate}}</p>
-<p>left class</p>
+<p>left classes(empty if you took all the paid classes)</p>
 <div style="margin-top: 20px" ng-repeat="date in result.restClassDate">
 <p>{{ date }}</p>
 </div>
+    <br>
+    <p>classes you paid and took:</p>
+    <div style="margin-top: 20px" ng-repeat="date in leftList">
+        <p>{{ date }}</p>
+    </div>
 </div>
 
 
@@ -62,6 +67,7 @@
     $scope.class_id = 0;
     $scope.request ={};
     $scope.numOfClass = 0;
+    $scope.leftList = {};
     $http.post('/testClassLeft')
 
     $scope.submit = function ()
@@ -72,14 +78,14 @@
             .then(function(respond){
 
                 if(respond.status === 200)
-                {
+                {   console.log(respond.data);
                     $scope.result = respond.data;
                     $scope.cl = $scope.result.restClasses;
                     $scope.endDate=$scope.result.endDate;
 
                     $scope.showResult = true;
+                    $scope.leftList = $scope.result.allClasses;
 
-                    console.log(respond.data);
                 }else {
                     alert("class_id or start date error, please re-enter");
                 }

@@ -35,17 +35,17 @@
         <tbody>
         <tr class="li_style" th:each="class, iStat: ${classList}">
 
-            <td th:text="${class.c_id}"></td>
-            <td th:text="${class.name}"></td>
+            <td th:text="${class.class_id}"></td>
+            <td th:text="${class.class_name}"></td>
             <td th:text="${class.enrollment}"></td>
             <td th:text="${class.price}"></td>
-            <td th:text="${class.sTime}"></td>
-            <td th:text="${class.instructor}"></td>
+            <td th:text="${class.startDate}"></td>
+            <td th:text="${class.teacher}"></td>
             <!--        <td><input type="checkbox" name = "selectIds" th:value="${class.class_id}${class.user_id}"/></td>-->
 
             <td>
                 <form th:object="${class}" th:action="dropHandler">
-                    <input name ="classId" th:value="${class.c_id}" type="hidden" />
+                    <input name ="classId" th:value="${class.class_id}" type="hidden" />
 
                     <input type="submit" value="view students" />
 

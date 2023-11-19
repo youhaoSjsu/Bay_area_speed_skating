@@ -281,7 +281,7 @@
 
 
         <div class="currentClassesDiv">
-            <h2 class="classIntroText">{{selectedCourse.name}}</h2>-->
+            <h2 class="classIntroText">{{selectedCourse.class_name}}</h2>-->
             <p class="classIntroText">address:&nbsp;&nbsp;&nbsp; {{selectedCourse.location}}</p>
             <p class="classIntroText">time:&nbsp;&nbsp;&nbsp; {{selectedCourse.time}}</p>
 
@@ -328,7 +328,7 @@
             };
 
             $scope.courses = [];
-            $scope.selectedCourse = {name:'',location:'',time:''};
+            $scope.selectedCourse = {class_name:'',location:'',time:''};
             $http.get('/api/showAbleCourses')
                 .then(function (respond){
 
@@ -347,7 +347,7 @@
                     $scope.courses.forEach(function(course) {
                         console.log(course.c_id.toString());
                         if (course.c_id.toString() === $scope.id) {
-                            $scope.selectedCourse.name = course.name;
+                            $scope.selectedCourse.class_name = course.class_name;
                             $scope.selectedCourse.time = course.time;
                             $scope.selectedCourse.location = course.location;
                             // Perform further actions with the matching course

@@ -4,9 +4,24 @@ import java.util.Date;
 
 public class CancelClassRequest {
     int class_id;
+    String className;
     Date date;
 
     String reason;
+
+    public CancelClassRequest(String className, Date date, String reason) {
+        this.className = className;
+        this.date = date;
+        this.reason = reason;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
 
     public CancelClassRequest() {
     }

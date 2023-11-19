@@ -86,24 +86,7 @@
     <p class="p-style">seting Option</p>
   </div>
 
-  <!--    <div  class = "search-height">-->
-  <!--        <form th:action="search" method="post" th:object = ${prod}>-->
-  <!--            <tr> search:-->
-  <!--                <p>item:-->
-  <!--                    <input class="search-in" type="search" name="name" id="" value="" />-->
-  <!--                </p>-->
-  <!--                <p>location:-->
-  <!--                    <input class="search-in" type="search" name="location" id="" value="" />-->
-  <!--                </p>-->
-  <!--            </tr>-->
-  <!--            <input type="submit" value="Submit"/>-->
 
-  <!--        </form>-->
-  <!--    </div>-->
-
-
-
-  <!--            th:action=""-->
 </div>
 <form th:object="${aUser}" th:action="signIn">
   <div style="float: right">
@@ -175,13 +158,13 @@
       </thead>
       <tbody>
       <tr class="li_style" th:each="class : ${classList}">
-        <td th:text="${class.c_id}"></td>
-        <td th:text="${class.name}"></td>
+        <td th:text="${class.class_id}"></td>
+        <td th:text="${class.class_name}"></td>
         <td th:text="${class.location}"></td>
         <td th:text="${class.price}"></td>
-        <td th:text="${class.sTime}"></td>
-        <td th:text="${class.instructor}"></td>
-        <td><input type="checkbox" name = "selectIds" value="999999" th:value="${class.c_id}"/></td>
+        <td th:text="${class.startDate}"></td>
+        <td th:text="${class.teacher}"></td>
+        <td><input type="checkbox" name = "selectIds" value="999999" th:value="${class.class_id}"/></td>
         <td><input width="200px" type="search" name="dates" value="null" /> <label >YYYY-MM-DD</label></td>
         <td><input width="200px" type="search" name="mDates" value="makeUp date" /> <label >YYYY-MM-DD</label></td>
       </tr>

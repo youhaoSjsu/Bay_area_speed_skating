@@ -176,13 +176,13 @@
         </thead>
         <tbody>
         <tr class="li_style" th:each="class : ${classList}">
-            <td th:text="${class.c_id}"></td>
-            <td th:text="${class.name}"></td>
+            <td th:text="${class.class_id}"></td>
+            <td th:text="${class.class_name}"></td>
             <td th:text="${class.location}"></td>
             <td th:text="${class.price}"></td>
-            <td th:text="${class.sTime}"></td>
-            <td th:text="${class.instructor}"></td>
-            <td><input type="checkbox" name = "selectIds" th:value="${class.c_id}"/></td>
+            <td th:text="${class.startDate}"></td>
+            <td th:text="${class.teacher}"></td>
+            <td><input type="checkbox" name = "selectIds" th:value="${class.class_id}"/></td>
 
         </tr>
         </tbody>

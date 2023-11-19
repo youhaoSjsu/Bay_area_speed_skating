@@ -17,6 +17,7 @@ class OptionalDuration implements Serializable{
     }
 }
 
+
 public class FormingClass extends Course implements Serializable {
     private DayOfWeek dayOfWeek;
     private String time;
@@ -30,7 +31,7 @@ public class FormingClass extends Course implements Serializable {
         this.optionDurations = durations;
         this.level= level;
         this.setLocation(location);
-        this.setName(name);
+        this.setClass_name(name);
         this.minStudent =minStudent;
         this.maxStudent = maxStudent;
     }

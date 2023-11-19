@@ -16,4 +16,6 @@ public class SessionValidationInterceptor implements HandlerInterceptor {
         User u =(User) session.getAttribute("currentA");
         return u.getId() > 0;
     }
+
+
 }

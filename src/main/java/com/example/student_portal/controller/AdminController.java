@@ -1,5 +1,7 @@
 package com.example.student_portal.controller;
 
+import com.example.student_portal.Service.ClassService;
+import com.example.student_portal.Service.CourseService;
 import com.example.student_portal.apiModule.CancelClassRequest;
 import com.example.student_portal.apiModule.RestClassRespond;
 import com.example.student_portal.module.*;
@@ -32,6 +34,14 @@ public class AdminController {
     @Autowired
     public JdbcTemplate jdbcTemplate;
 
+    private CourseService courseService;
+    @Autowired
+    public AdminController(CourseService courseService)
+    {
+        this.courseService =courseService;
+    }
+
+
     //public SqlClass sqlClass = new SqlClass(jdbcTemplate);
 
 //    public User CurrA;
@@ -49,6 +59,7 @@ public class AdminController {
         return mv;
 
     }
+
 
 
     @PostMapping("/api/enableShow")
@@ -72,8 +83,7 @@ public class AdminController {
     @PostMapping("/api/deleteClass")
     public ResponseEntity<String> deleteClass(@RequestBody int respondId)
     {
-        SqlClass sc = new SqlClass(jdbcTemplate);
-        int result = sc.deleteClass(respondId);
+        int result = courseService.deleteCourse(respondId);
         if(result ==1)
         {
 
@@ -215,12 +225,7 @@ public class AdminController {
     public String appAprove(int index)
     {
         classPersonDataRow cpdr = applicationArr[index];
-        //primary key is the combo of user_id and c_id
-        //command 1 = aprove, -1 = decline;
-//        Map<String,Integer> mCommand = new HashMap<>();
-//        mCommand.put("class_id", cpdr.getClass_id());
-//        mCommand.put("user_id", cpdr.getUser_id());
-//        mCommand.put("command", 1);
+
         SqlClass sqlClass = new SqlClass(jdbcTemplate);
         int result = sqlClass.appOperater(cpdr,1);
         if(result<1)
@@ -264,7 +269,7 @@ public class AdminController {
             User u = (User)session.getAttribute("currentA");
             mv.addObject("aUser",u);
 
-        Course[] cArr = sqlClass.loadClassIntoArray();
+        Course[] cArr = courseService.getAllCourses().toArray(new Course[0]);
 
         classPersonDataRow dr = new classPersonDataRow();
         classPersonDataRow []cpdrs = new classPersonDataRow[0];
@@ -285,7 +290,7 @@ public class AdminController {
                 dr = new classPersonDataRow(Integer.parseInt(classId), "no students found");
             }
 
-            Course[] cArr = sqlClass.loadClassIntoArray();
+            Course[] cArr = courseService.getAllCourses().toArray(new Course[0]);
             mv.addObject("classList",cArr);
             mv.addObject("cpdrs",cpdrs);
             mv.addObject("dr",dr);
@@ -313,7 +318,7 @@ public class AdminController {
         User u = (User)session.getAttribute("currentA");
         mv.addObject("aUser",u);
 
-        Course[] cArr = sqlClass.loadClassIntoArray();
+        Course[] cArr = courseService.getAllCourses().toArray(new Course[0]);
         classPersonDataRow []cpdrs = listToArray(sqlClass.getStudentsInClass(class_id));
         classPersonDataRow dr;
         if (cpdrs.length>0)
@@ -791,6 +796,22 @@ public class AdminController {
         }
 
 
+
+    }
+    @RequestMapping(value = "/recordCancel", method = RequestMethod.GET)
+    public ModelAndView recordCancel(HttpServletRequest request)
+    {
+
+        ModelAndView mv = new ModelAndView("cancelClassForm.html");
+        return mv;
+
+    }
+
+    @RequestMapping(value = "/ClassStateMan", method = RequestMethod.GET)
+    public ModelAndView ClassStateMan(HttpServletRequest request)
+    {
+        ModelAndView mv = new ModelAndView("ClassStateMan.html");
+        return mv;
 
     }
 
