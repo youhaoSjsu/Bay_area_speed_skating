@@ -94,6 +94,7 @@
 
 
 
+
 <form th:object="${aUser}" th:action="signIn">
   <div style="float: right">
 
@@ -121,6 +122,8 @@
     <button class="adHpButton" ng-click="whyUsManagement()">Skate with Us page</button>
 
     <button class="adHpButton" ng-click="cancelClass()">cancel a Class</button>
+
+    <button class="adHpButton" ng-click="stuMp()">cancel a Class</button>
   </div>
 
 
@@ -189,6 +192,9 @@
     }
     $scope.cancelClass = function (){
       $window.location.href = $location.url() + "adCancelCLass";
+    }
+    $scope.stuMp = function (){
+      $window.location.href = $location.url()+"stuMp";
     }
   });
 

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.xml.ws.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -813,6 +814,13 @@ public class AdminController {
         ModelAndView mv = new ModelAndView("ClassStateMan.html");
         return mv;
 
+    }
+
+    @RequestMapping(value = "/stuMp",method = RequestMethod.GET)
+    public ModelAndView stuMp(HttpServletRequest request)
+    {
+        ModelAndView mv = new ModelAndView("");
+        return mv;
     }
 
 

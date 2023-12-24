@@ -54,9 +54,7 @@ public class UserController extends mainCont {
 
             for(int i : selectIds)
             {
-
                 s= classSql.writeAnApplication(u.getId(),i,comment);
-
                 if(!s)
                     break;;
             }

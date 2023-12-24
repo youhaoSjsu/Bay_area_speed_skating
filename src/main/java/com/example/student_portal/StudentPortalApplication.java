@@ -8,8 +8,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
-
-
+import org.springframework.scheduling.annotation.EnableAsync;
 
 
 //public class StudentPortalApplication {
@@ -28,6 +27,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class})
 @ComponentScan({"com.example.student_portal.controller","com.example.student_portal.Service","com.example.student_portal.ServiceImpl","com.example.student_portal.Components"})
 @MapperScan("com.example.student_portal.Mapper")
+@EnableAsync
 public class StudentPortalApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

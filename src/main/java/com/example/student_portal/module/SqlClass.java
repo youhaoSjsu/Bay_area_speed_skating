@@ -7,6 +7,7 @@ import org.springframework.data.relational.core.sql.In;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -166,13 +167,12 @@ public class SqlClass {
                 aCourse.setStartDate(m.get("startDate").toString());
             }
 
-
-
             lc.add(aCourse);
         }
         return lc;
     }
 //write a row of application into the application table
+    @Transactional
     public boolean writeAnApplication( int u_id, int class_id,String comment)
     {
         boolean success = false;
@@ -212,7 +212,6 @@ public class SqlClass {
             //String m = "+\""+lc.get(i).getMd()+"\"";
             sql = "Insert Into absent (user_id,class_id, referDate,absentDate,comment,makeUp) values ("+Integer.toString(lc.get(i).getUser_id())+","+lc.get(i).getClass_id()+",'"+lc.get(i).getsReferDate()+"','"+lc.get(i).sDateOfAbsent+"','"+lc.get(i).comment+"','"+lc.get(i).getMd()+"');";
             jdbcTemplate.execute(sql);
-
 
         }
 

@@ -44,6 +44,8 @@ public class HpBoardController {
         return ResponseEntity.ok(hpArr);
     }
 
+
+
     @PostMapping("/api/addHpBoard")
     int addHpBoard(@RequestBody HpBoard hpBoard)
     {
