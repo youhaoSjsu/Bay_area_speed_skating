@@ -4,21 +4,53 @@ import java.sql.Time;
 import java.time.DayOfWeek;
 
 public class Course {
-    protected int c_id;
-    public int maxStudent;
+
+    protected int class_id;
+
+    public int capacity;
     public int enrollment;
     private String location;
 
-    public String eTime;
+    private int classCount;
 
-    public String mode;
+    public String endDate;
 
-    public String getMode() {
-        return mode;
+    public String mode_of_instruction;
+    public String time;
+    private String class_name;
+    private double price;
+
+    private String startDate;
+
+    private int showEnable;
+
+    private String description;
+
+    private int minStudent;
+    private String status;
+
+    public int getMinStudent() {
+        return minStudent;
     }
 
-    public void setMode(String mode) {
-        this.mode = mode;
+    public void setMinStudent(int minStudent) {
+        this.minStudent = minStudent;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getMode_of_instruction() {
+        return mode_of_instruction;
+    }
+
+    public void setMode_of_instruction(String mode_of_instruction) {
+        this.mode_of_instruction = mode_of_instruction;
     }
 
     public String getDescription() {
@@ -29,15 +61,7 @@ public class Course {
         this.description = description;
     }
 
-    public String time;
-    private String name;
-    private double price;
 
-    private String sTime;
-
-    private int showEnable;
-
-    private String description;
 
     public int getShowEnable() {
         return showEnable;
@@ -55,21 +79,6 @@ public class Course {
         this.enrollment = enrollment;
     }
 
-    public int getMaxStudent() {
-        return maxStudent;
-    }
-
-    public void setMaxStudent(int maxStudent) {
-        this.maxStudent = maxStudent;
-    }
-
-    public String geteTime() {
-        return eTime;
-    }
-
-    public void seteTime(String eTime) {
-        this.eTime = eTime;
-    }
 
     public String getTime() {
         return time;
@@ -79,26 +88,20 @@ public class Course {
         this.time = time;
     }
 
-    public String getsTime() {
-        return sTime;
-    }
 
-    public void setsTime(String sTime) {
-        this.sTime = sTime;
-    }
 
     private Time c_time;
     private DayOfWeek c_day;
-    private String instructor;
+    private String teacher;
 
-    private int nc;
 
-    public String getName() {
-        return name;
+
+    public String getClass_name() {
+        return class_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setClass_name(String class_name) {
+        this.class_name = class_name;
     }
 
     public String getLocation() {
@@ -113,58 +116,53 @@ public class Course {
     }
 
     public Course(int c_id) {
-        this.c_id = c_id;
+        this.class_id = c_id;
     }
 
     public Course(int c_id, String teacher, String location, String time,String name,double price) {
-        this.c_id = c_id;
-        this.instructor = teacher;
+        this.class_id = c_id;
+        this.teacher = teacher;
         this.location = location;
-        this.sTime = time;
-        this.name = name;
+        this.time = time;
+        this.class_name = name;
         this.price = price;
 
     }
     public Course(int c_id, String teacher, String location, String time,String name,double price,int showStatus) {
-        this.c_id = c_id;
-        this.instructor = teacher;
+        this.class_id = c_id;
+        this.teacher = teacher;
         this.location = location;
-        this.sTime = time;
-        this.name = name;
+        this.time = time;
+        this.class_name = name;
         this.price = price;
         this.showEnable = showStatus;
-
     }
+
+
 
 
 
     public Course(int id, int nc, double price, Time time, DayOfWeek day, String teacher,String location,String name)
     {
-        c_id = id;
-        this.nc = nc;
+        class_id = id;
+        this.classCount = nc;
         this.price = price;
         this.c_time = time;
         this.c_day = day;
-        this.instructor = teacher;
-        this.name = name;
+        this.teacher = teacher;
+        this.class_name = name;
         this.location = location;
     }
 
 
-    public int getNc() {
-        return nc;
+
+
+    public String getTeacher() {
+        return teacher;
     }
 
-    public void setNc(int nc) {
-        this.nc = nc;
-    }
-
-    public String getInstructor() {
-        return instructor;
-    }
-
-    public void setInstructor(String instructor) {
-        this.instructor = instructor;
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
     }
 
     public DayOfWeek getC_day() {
@@ -191,13 +189,43 @@ public class Course {
         this.price = price;
     }
 
-    public int getC_id() {
-        return c_id;
+    public int getClass_id() {
+        return class_id;
     }
 
-    public void setC_id(int c_id) {
-        this.c_id = c_id;
+    public void setClass_id(int class_id) {
+        this.class_id = class_id;
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
 
+    public void setCapacity(int capcity) {
+        this.capacity = capcity;
+    }
+
+    public int getClassCount() {
+        return classCount;
+    }
+
+    public void setClassCount(int classCount) {
+        this.classCount = classCount;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
 }

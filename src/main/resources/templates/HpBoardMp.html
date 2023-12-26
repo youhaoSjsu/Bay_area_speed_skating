@@ -229,7 +229,7 @@
     $scope.newBoard = {id: 10086, name:'',type:'1',rank:'',description:'',imageLinks:'',videoLink:''};
 
     $scope.addNewBoard =function (){
-      if(!containUc())
+      if(!containUc($scope.newBoard.imageLinks))
       {
         alert('image link is not sharable google drive link, converting');
         $scope.newBoard.imageLinks = shareAbleLink($scope.newBoard.imageLinks);

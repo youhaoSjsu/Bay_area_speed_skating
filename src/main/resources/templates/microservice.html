@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--microservice.html-->
+<head>
+  <meta charset="UTF-8">
+  <title>Bay area Skating club</title>
+
+  <!--    <script type='text/javascript' src='angular.js'></script>-->
+  <!--    <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.3/ui-bootstrap.min.js"></script>-->
+  <!--    <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.3/ui-bootstrap-tpls.js"></script>-->
+  <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+  <title></title>
+  <style>
+    body{
+      /*margin-top:0px;*/
+      /*margin-left: 0px;*/
+      /*width: 2000px;*/
+      margin: 0; /* Remove default margin */
+      padding: 0; /* Remove default padding */
+      overflow-x: hidden; /* Prevent horizontal scrollbars */
+    }
+
+    .form3 input {
+      outline: 0;
+      border: 0;
+      padding: 8px;
+      background-color: #282828;
+      color: white;
+    }
+
+    .form3 input[type=submit] {
+      font-family: Helvetica, sans-serif;
+      /*text-transform: uppercase;*/
+      outline: 0;
+      background-image: linear-gradient(90deg,#FC0441,#F62DA8);
+      width: 100px;
+      border: 0;
+      padding: 8px;
+      color: #FFFFFF;
+      font-size: 13px;
+      /*-webkit-transition: all 0.3 ease;*/
+      /*transition: all 0.3 ease;*/
+      cursor: pointer;
+    }
+
+    .mainBody
+    {
+      /*width: 100%;*/
+      height: 2500px;
+      /*position: absolute;*/
+      background-color: black;
+
+
+    }
+
+
+    .buttonOnvVideo {
+      /*width: 100%;*/
+      z-index: 15;
+      position: absolute;
+
+      top: -10px;
+      color: white;
+
+    }
+    .headerDiv{
+      position: relative;
+      top:10px;
+      width: 100%;
+
+    }
+
+    .headerTag{
+
+      display:inline-block;
+      width: 220px;
+      height:40px;
+      margin-left: 20px;
+      float: right;
+      position: relative;
+      top: 0px;
+    }
+    .listView{
+      position: relative;
+      top:100px;
+      display: inline-block;
+      width: 100%;
+      align-items: center;
+      flex-direction: column;
+    }
+    .msButton{
+      text-align: center; align-items: center; flex-direction: column; width: 100%;height: 80px;
+      cursor: pointer;
+    }
+    .msButton:hover{
+      background-color: #32CCBC;
+    }
+  h2{
+    color: #FAEBD7;
+  }
+  </style>
+
+</head>
+
+
+<body ng-app="indexApp" ng-controller="indexCon" >
+
+<div class="mainBody">
+  <div class="headerDiv">
+    <div  style="width: 150px;   ">
+      <form  class ="buttonOnvVideo" th:action="signIn">
+
+        <div class="headerTag" ng-click="microService()">
+          <h3 class="buttonOnvVideo"> microService</h3>
+        </div>
+        <div class="headerTag" ng-click ="ourAwards()">
+          <h3 class="buttonOnvVideo" >Our awards</h3>
+        </div>
+        <div class="headerTag" ng-click="ourCoaches()">
+          <h3 class="buttonOnvVideo" >Coaches</h3>
+        </div>
+        <div ng-click ="scrollToId('indexCurrentClasses')"class="headerTag">
+          <h3 class="buttonOnvVideo">Classes</h3>
+        </div>
+        <div ng-click ="whyUs()" class="headerTag">
+          <img style="margin-left: -24px;margin-top: 10px; width: 20px;height: 20px" src="/pics/club.png">
+          <h3  class="buttonOnvVideo" >why join us</h3>
+        </div>
+
+
+
+        <div ng-click ="signIn()" class="headerTag">
+          <img style="margin-left: -24px;margin-top: 10px; width: 20px;height: 20px" src="/pics/add.png">
+          <h3  class="buttonOnvVideo" >SignIn & SignUp</h3>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <div class="listView">
+
+    <div class="msButton"  ng-click="classLeft()">
+      <h2 >How many classes I have</h2>
+    </div>
+
+  </div>
+
+  <h4 style="margin-left: 650px;margin-top: 240px; color: #90F7Ec; font-family: 'Bodoni MT'">This web app powered by Youhao Chen @ Charles W Davidson Engineering college SJSU </h4>
+</div>
+<script>
+
+  var app = angular.module('indexApp',[]);
+  app.controller('indexCon',function ($scope,$window,$location,$http, $interval){
+    $scope.indexItv = 1000;
+    $scope.test ='hello, this is test';
+
+    $scope.signIn = function ()
+    {
+      $window.location.href = $location.url() + "signIn";
+    };
+
+    $scope.classLeft = function (){
+      $window.location.href = $location.url()+"classLeft";
+    }
+
+    $scope.homePage = function ()
+    {
+      $window.location.href = $location.url() + "index";
+    }
+
+    $scope.ourAwards = function (){
+      $window.location.href = $location.url() + "ourAward";
+    }
+    $scope.microService =function () {
+      $window.location.href = $location.url() + "microservice";
+    }
+
+    $scope.signIn = function ()
+    {
+      $window.location.href = $location.url() + "signIn";
+    }
+
+    $scope.ourCoaches = function ()
+    {
+      $window.location.href = $location.url() + "ourCoaches";
+    }
+    $scope.whyUs = function ()
+    {
+      $window.location.href = $location.url() + "whyUs";
+    }
+
+
+
+  });
+</script>
+
+
+  <script>
+    window.onload = function () {
+
+      var element_obj = document.getElementById("wrapper");
+      var heigth_screen = window.screen.height;
+      var width_screen = window.screen.width;
+      heigth_screen = heigth_screen * 1;
+      element_obj.style.height = heigth_screen + "px";
+      width_screen = width_screen * 1;
+      element_obj.style.width = width_screen + "px";
+    };
+  </script>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

@@ -13,33 +13,35 @@
         .p-style{
             margin-top:5px ;
         }
-        .good_img
-        {
-            width:200px; height:100%; background:#0000ff; margin-left: 0px; margin-top: 0px;
-        }
+
         .grid_div
         {
-            margin-top:50px;width: 100%; height: 500px;background: #FAEBD7;
+            margin-top:50px;width: 100%; height: 500px;
         }
-        .li_style
-        {
-            width: 100%; height: 100px; background: #00ff78;border-bottom: 1px solid#500257;
-            list-style:none;
-        }
-        .lable_style
-        {
-            margin-left:80%;
-        }
-        .search-in{margin-top: 0px}
-        .search-height{margin-left: 40px;border:0px solid #F00; margin-top: -20px; width:250px; height:60px; }
 
 
         .div-height{border:0px solid #F00; width:70px; height:60px; margin-left: 10px}
         .button-style{border: 1px solid #0000ff; width:70px; height:50px; color:#0000ff;}
         .image-style{border: 0px solid #0000ff; width:70px; height:50px; background:#0000ff;}
+        .listView{
+            position: relative;
+            top:150px;
+            display: inline-block;
+            width: 100%;
+            align-items: center;
+            flex-direction: column;
+        }
+        .msButton{
+            text-align: center; align-items: center; flex-direction: column; width: 100%;height: 80px;
+            cursor: pointer;
+            background: #FAEBD7;
+        }
+        .msButton:hover{
+            background-color: #32CCBC;
+        }
     </style>
 </head>
-<body>
+<body ng-app="myApp" ng-controller="myCtrl">
 <H2>admin main page</H2>
 <form th:action="student_main.html" th:object="${aUser}">
 
@@ -48,7 +50,7 @@
 
 
 
-<div ng-app="myApp" ng-controller="myCtrl" align="top">
+<div  align="top">
 
 
     <div ng-click="marketClick()" ng-app="myApp"  class="div-height", align="center">
@@ -103,6 +105,18 @@
 </form>
 <!--script of buttons-->
 <!--        these functions work for jump-->
+
+<div class="listView" align="top">
+
+    <div class="msButton"  ng-click="recordCancel()">
+        <h2 >Cancel a Class</h2>
+    </div>
+    <div class="msButton"  ng-click="ClassStateMan()">
+        <h2 >manage Class States</h2>
+    </div>
+
+</div>
+
 <script>
     var app = angular.module('myApp', []);
     app.controller('myCtrl', function($scope,$window, $location) {
@@ -139,6 +153,13 @@
         $scope.hpMage = function (){
             $window.location.href = $location.url()+"adHp";
         }
+        $scope.recordCancel = function ()
+        {
+            $window.location.href = $location.url()+"recordCancel";
+        }
+        $scope.ClassStateMan=function (){
+            $window.location.href = $location.url()+"ClassStateMan";
+        }
 
 
     });
@@ -147,30 +168,7 @@
 
 
 <div class="grid_div">
-<!--    <table border="1"  id="hidden-table-info">-->
-<!--        <thead>-->
-<!--        <tr>-->
-<!--            <th>id</th>-->
-<!--            <th>name</th>-->
-<!--            <th>location</th>-->
-<!--            <th>price</th>-->
-<!--            <th>time</th>-->
-<!--            <th>teacher</th>-->
 
-<!--        </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        <tr class="li_style" th:each="class : ${classList}">-->
-<!--            <td th:text="${class.c_id}"></td>-->
-<!--            <td th:text="${class.name}"></td>-->
-<!--            <td th:text="${class.location}"></td>-->
-<!--            <td th:text="${class.price}"></td>-->
-<!--            <td th:text="${class.sTime}"></td>-->
-<!--            <td th:text="${class.instructor}"></td>-->
-
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--    </table>-->
 </div>
 
 </body>

@@ -122,6 +122,7 @@
   </div>
 
 
+
   <form th:object="${aUser}" th:action="signIn">
     <div style="float: right">
 
@@ -226,6 +227,7 @@
     $scope.hpMage = function () {
       $window.location.href = $location.url() + "adHp";
     }
+
     $scope.awards = [];
     $scope.newAward = {id: 10086, name:'',number:'',description:'',imageLinks:[]};
     function containUc(str){

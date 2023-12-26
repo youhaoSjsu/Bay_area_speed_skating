@@ -32,13 +32,13 @@
         <tbody>
         <tr class="li_style">
 
-            <td>{{course.c_id}}</td>
-            <td>{{course.name}}</td>
+            <td>{{course.class_id}}</td>
+            <td>{{course.class_name}}</td>
             <td>{{course.time}}</td>
             <td>{{course.showEnable}}</td>
-            <td><button ng-click="disable(course.c_id)" style="color: greenyellow">disable</button></td>
-            <td><button ng-click="enable(course.c_id)" style="color: blue">enable</button></td>
-            <td><button ng-click="delete(course.c_id)" style="color: red">delete</button></td>
+            <td><button ng-click="disable(course.class_id)" style="color: greenyellow">disable</button></td>
+            <td><button ng-click="enable(course.class_id)" style="color: blue">enable</button></td>
+            <td><button ng-click="delete(course.class_id)" style="color: red">delete</button></td>
         </tr>
         </tbody>
     </table>
@@ -87,7 +87,7 @@
         $scope.delete = function (id){
             $http.post('/api/deleteClass',id,{responseType: 'text'})
                 .then(function (respond){
-                    alert(respond.data());
+                    alert(respond.data);
                     $window.location.reload();
                 })
                 .catch(function (error){

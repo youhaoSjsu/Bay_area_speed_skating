@@ -25,7 +25,7 @@ public class classOfaCourse extends  Course{
     }
 
     public classOfaCourse (int class_id, int user_id, String sDateOfAbsent, String sReferDate, String comment) throws ParseException {
-        this.c_id = class_id;
+        this.class_id = class_id;
         this.user_id = user_id;
         this.sDateOfAbsent = sDateOfAbsent;
         this.sReferDate = sReferDate;

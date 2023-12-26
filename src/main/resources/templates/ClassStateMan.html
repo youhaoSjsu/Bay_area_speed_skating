@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+  <script src="https://cdn.bootcss.com/angular.js/1.7.0/angular-route.min.js"></script>
+  <title>class states management</title>
+  <style>
+    /*div{*/
+    /*    display: inline-block; float: left; margin-top: 15px;*/
+    /*}*/
+    .p-style{
+      margin-top:5px ;
+    }
+    .good_img
+    {
+      width:200px; height:100%; background:#0000ff; margin-left: 0px; margin-top: 0px;
+    }
+    .grid_div
+    {
+      margin-top:50px;width: 100%; height: 500px;background: #FAEBD7;
+    }
+    .li_style
+    {
+      width: 100%; height: 100px; background: #00ff78;border-bottom: 1px solid#500257;
+      list-style:none;
+    }
+    .lable_style
+    {
+      margin-left:80%;
+    }
+    .search-in{margin-top: 0px}
+    .search-height{margin-left: 40px;border:0px solid #F00; margin-top: -20px; width:250px; height:60px; }
+
+
+    .div-height{ display: inline-block; float: left; margin-top: 15px;border:0px solid #F00; width:70px; height:60px; margin-left: 10px}
+    .button-style{border: 1px solid #0000ff; width:70px; height:50px; color:#0000ff;}
+    .image-style{border: 0px solid #0000ff; width:70px; height:50px; background:#0000ff;}
+    .adHpButton
+    {
+      color: blue;
+      background-color: aquamarine;
+      width: 200px;
+      height: 50px;
+    }
+    .adHpFunctions{
+      height: 2000px;
+      position: relative;
+      top: 200px;
+      left: -500px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .dpTextarea{
+      height: 150px;
+      width: 400px;
+    }
+    .linkTextarea{
+      height: 20px;
+      width: 400px;
+    }
+    .bueatyButton
+    {
+      width: 100px;
+      height: 50px;
+      border-radius: 5px;
+      background: linear-gradient(#FFF886, #F072B6);
+    }
+  </style>
+</head>
+<body>
+<H2>Home Page Management</H2>
+
+
+
+<div ng-app="myApp" ng-controller="myCtrl" align="top">
+
+
+  <div ng-click="marketClick()" ng-app="myApp"  class="div-height", align="center">
+
+    <img class="image-style" />
+    <p class="p-style" >{{kkll}}</p>
+  </div>
+
+  <div ng-click="addClassClick()" class="div-height", align="center" >
+    <img class="image-style", />
+    <p class="p-style">add class</p>
+  </div>
+
+  <div  ng-click="registrations()" class="div-height", align="center" >
+    <img class="image-style", />
+    <p class="p-style">registration handler</p>
+  </div>
+  <div ng-click="vacateClick()" class="div-height", align="center" >
+    <img  class="image-style", />
+    <p class="p-style">absent handler</p>
+  </div>
+  <div ng-click="dropClick()" class="div-height", align="center" >
+    <img  class="image-style", />
+    <p class="p-style">drop</p>
+  </div>
+
+  <div ng-click="statisClicker()" class="div-height", align="center" >
+    <img  class="image-style", />
+    <p class="p-style">statistic tools</p>
+  </div>
+
+  <div ng-click="settingClicker()" class="div-height", align="center" >
+    <img  class="image-style", />
+    <p class="p-style">seting Option</p>
+  </div>
+  <div ng-click="hpMage()" class="div-height", align="center" >
+    <img  class="image-style" />
+    <p class="p-style">Home Page Management</p>
+  </div>
+
+
+
+  <form th:object="${aUser}" th:action="signIn">
+    <div style="float: right">
+
+      <p>UserName:
+        <label th:text="${aUser?.name}"></label>
+      </p>
+      <input type="submit" value="switch"/>
+
+
+    </div>
+  </form>
+  <br><br>
+  <div class="adHpFunctions" >
+
+    <div style="height: 750px" ng-repeat="s in states">
+      <h4>These are classes that are presented on the planing board</h4>
+      <h4>{{state.class_id}}</h4>
+      <h4>minsize</h4>
+      <input ng-model="s.minSize"/>
+      <br>
+      <h4>state</h4>
+      <input ng-model="s.state"/>
+      <br>
+      <h4>start time</h4>
+
+
+      <input ng-model="s.startAt"/>
+      <br>
+      <h4>end time</h4>
+
+      <input ng-model="s.endAt">
+
+
+      <div style="width: 200px;height: 50px;display: inline-block">
+        <button ng-click="updateState(s.class_id)">submit</button>
+        <button ng-click="removeState(s.class_id)">remove</button>
+      </div>
+
+
+      <p style="color: blue">========================================================================</p>
+      <br><br>
+
+    </div>
+    <h3>add new</h3>>
+    <div style="margin-left:20px;top: 20px;position: relative">
+
+      <h4>id</h4>
+      <input ng-model="newState.class_id"/>
+      <br>
+      <h4>minsize</h4>
+      <input ng-model="newState.minSize"/>
+      <br>
+      <h4>state</h4>
+      <!--      <textarea class="dpTextarea" ng-model="newAward.description">dp</textarea>-->
+      <input ng-model="newState.state"/>
+      <br>
+      <h4>Start time</h4>
+      <!--      <textarea class="dpTextarea" ng-model="newAward.description">dp</textarea>-->
+      <input ng-model="newState.startAt"/>
+      <br>
+
+      <h4>end Time</h4>
+      <!--      <textarea class="dpTextarea" ng-model="newAward.description">dp</textarea>-->
+      <input ng-model="newState.endAt"/>
+      <br>
+
+
+      <button class="bueatyButton" ng-click="addNewState()">add new state</button>
+    </div>
+
+  </div>
+
+
+</div>
+
+
+
+<script>
+  var app = angular.module('myApp', []);
+  app.controller('myCtrl', function($scope,$http,$window, $location) {
+    $scope.kkll = "Home Page";
+    $scope.marketClick = function () {
+      alert('ok');
+      $window.location.href = $location.url() + "adminMain";
+    };
+    $scope.registrations = function () {
+      $window.location.href = $location.url() + "registrations";
+    };
+    $scope.dropClick = function () {
+      $window.location.href = $location.url() + "dropHandler";
+    }
+    $scope.vacateClick = function () {
+      $window.location.href = $location.url() + "absentHandler";
+    }
+    $scope.addClassClick = function () {
+      $window.location.href = $location.url() + "createClass";
+    }
+    $scope.statisClicker = function () {
+      $window.location.href = $location.url() + "adStatic";
+    }
+    $scope.settingClicker = function () {
+      $window.location.href = $location.url() + "adSetting";
+    }
+    $scope.hpMage = function () {
+      $window.location.href = $location.url() + "adHp";
+    }
+
+
+
+    $scope.states = [];
+    $scope.newState = {class_id:0,minSize: 0, state:'',startAt:'',endAt:'' };
+
+    $scope.addNewState =function (){
+
+      $http.post('/api/saveState',$scope.newState)
+              .then(function (respond)
+              {
+                console.log(respond.data);
+                $scope.newState = {class_id:0,minSize: 0, state:'',startAt:'',endAt:'' };
+                $window.location.reload();
+              })
+              .catch(function (error){
+                alert(error);
+              })
+    }
+
+
+
+    $scope.updateState = function (id){
+      console.log(id);
+      console.log($scope.states);
+      var target = {};
+      var found = false;
+      $scope.states.forEach(function (state){
+        if(state.class_id.toString()===id.toString() && !found)
+        {
+          target = state;
+          found = true;
+        }
+      })
+
+      $http.post('/api/updateClassState',target)
+              .then(function (respond){
+                console.log(respond.data);
+                alert(respond.data);
+              }).catch(function (error){
+        console.log(error);
+      })
+      $window.location.reload();
+
+    }
+
+    $scope.removeState =function (id)
+    {
+      // var target = {};
+      // var found = false;
+      // $scope.states.forEach(function (state){
+      //   if(state.class_id.toString()===id.toString() && !found)
+      //   {
+      //     target = state;
+      //     found = true;
+      //   }
+      // })
+
+      $http.post('/api/deleteClassState',id)
+              .then(function (respond){
+                console.log(respond.data);
+                alert(respond.data);
+              }).catch(function (error){
+        console.log(error);
+      })
+      $window.location.reload();
+    }
+//get all
+    $http.get('/api/findAllClassState')
+            .then(function (responds) {
+              console.log(responds.data);
+              $scope.states = responds.data;
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+
+  })
+
+
+</script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+    <script src="https://cdn.bootcss.com/angular.js/1.7.0/angular-route.min.js"></script>
+    <title></title>
+    <style>
+        .hDiv{
+            /*display: inline-block; float: left; margin-top: 15px;*/
+        }
+        .p-style{
+            margin-top:5px ;
+        }
+
+        .div-height{
+            display: inline-block; float: left; margin-top: 15px;border:0px solid #F00; width:70px; height:60px; margin-left: 10px}
+        .button-style{border: 1px solid #0000ff; width:70px; height:50px; color:#0000ff;}
+        .image-style{border: 0px solid #0000ff; width:70px; height:50px; background:#0000ff;}
+        .adHpButton
+        {
+
+            color: blue;
+            background-color: aquamarine;
+            width: 200px;
+            height: 50px;
+            margin-top: 50px;
+        }
+        .adHpFunctions{
+            margin-top: 20px;
+            height: 1000px;
+            position: relative;
+            top: 100px;
+            left: -500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<H2>Home Page Management</H2>
+<form th:action="student_main.html" th:object="${aUser}">
+
+    <h4 th:text = "${aUser.name}"></h4>
+</form>
+
+
+
+<div ng-app="myApp" ng-controller="myCtrl" align="top">
+
+
+    <div ng-click="marketClick()" ng-app="myApp"  class="div-height", align="center">
+
+        <img class="image-style" />
+        <p class="p-style" >{{kkll}}</p>
+    </div>
+
+    <div ng-click="addClassClick()" class="div-height", align="center" >
+        <img class="image-style", />
+        <p class="p-style">add class</p>
+    </div>
+
+    <div  ng-click="registrations()" class="div-height", align="center" >
+        <img class="image-style", />
+        <p class="p-style">registration handler</p>
+    </div>
+    <div ng-click="vacateClick()" class="div-height", align="center" >
+        <img  class="image-style", />
+        <p class="p-style">absent handler</p>
+    </div>
+    <div ng-click="dropClick()" class="div-height", align="center" >
+        <img  class="image-style", />
+        <p class="p-style">drop</p>
+    </div>
+
+    <div ng-click="statisClicker()" class="div-height", align="center" >
+        <img  class="image-style", />
+        <p class="p-style">statistic tools</p>
+    </div>
+
+    <div ng-click="settingClicker()" class="div-height", align="center" >
+        <img  class="image-style", />
+        <p class="p-style">seting Option</p>
+    </div>
+    <div ng-click="hpMage()" class="div-height", align="center" >
+        <img  class="image-style" />
+        <p class="p-style">Home Page Management</p>
+    </div>
+
+
+
+
+
+
+    <form th:object="${aUser}" th:action="signIn">
+        <div style="float: right">
+
+            <p>UserName:
+                <label th:text="${aUser?.name}"></label>
+            </p>
+            <input type="submit" value="switch"/>
+
+
+        </div>
+    </form>
+    <br><br>
+
+    <div class="adHpFunctions"  >
+
+        <p>class Id</p>
+        <input ng-model="class_id"/>
+        <br><br>
+        <p>Date : mm/dd/yyyy</p>
+        <input ng-model="date"/>
+        <br><br>
+        <input ng-model ="reason"/>
+
+        <button ng-click="submit()">submit</button>
+
+    </div>
+
+
+</div>
+<!--script of buttons-->
+<!--        these functions work for jump-->
+<script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope,$window,$http, $location) {
+        $scope.kkll = "Home Page";
+        $scope.class_id;
+        $scope.date;
+        $scope.reason;
+        $scope.submit = function(){
+            // Parse the date string in the format "MM/dd/yyyy"
+            var dateParts = $scope.date.split('/');
+            var month = parseInt(dateParts[0]) - 1; // Months are zero-based
+            var day = parseInt(dateParts[1]);
+            var year = parseInt(dateParts[2]);
+
+            // Create a JavaScript Date object
+            var jsDate = new Date(year, month, day);
+            console.log("a request");
+            $scope.request ={class_id: $scope.class_id,date:jsDate,reason:$scope.reason }
+            $http.post('/createCancel',$scope.request)
+                .then(function (respond){
+                if(respond.status === 200)
+                {
+                    alert(respond.data);
+                }
+                else {
+                    console.log(respond.data);
+                    alert(respond.data);
+                }
+
+
+            }).catch(function (error){
+                alert('error');
+            })
+        }
+
+
+
+
+
+
+        $scope.marketClick = function ()
+        {
+            alert('ok');
+            $window.location.href = $location.url() + "adminMain";
+        };
+        $scope.registrations = function ()
+        {
+            $window.location.href = $location.url() + "registrations";
+        };
+        $scope.dropClick = function ()
+        {
+            $window.location.href = $location.url() + "dropHandler";
+        }
+        $scope.vacateClick = function ()
+        {
+            $window.location.href = $location.url() + "absentHandler";
+        }
+        $scope.addClassClick = function ()
+        {
+            $window.location.href = $location.url() + "createClass";
+        }
+        $scope.statisClicker = function ()
+        {
+            $window.location.href = $location.url() + "adStatic";
+        }
+        $scope.settingClicker =function ()
+        {
+            $window.location.href = $location.url()+"adSetting";
+        }
+        $scope.hpMage = function (){
+            $window.location.href = $location.url()+"adHp";
+        }
+        $scope.classType = function (){
+            alert('ok');
+            console.log("classType function called");
+            $window.location.href = $location.url()+"classTypesMan";
+
+        }
+
+        $scope.awardManagement =function (){
+            $window.location.href = $location.url()+"awardsMan";
+        }
+        $scope.coachManagement = function (){
+            $window.location.href = $location.url()+"coachMp";
+        }
+        $scope.whyUsManagement = function (){
+            $window.location.href = $location.url()+"whyUsMp";
+        }
+        $scope.hpBoardMp=function ()
+        {
+            $window.location.href = $location.url()+"hpBoardMp";
+        }
+        $scope.videoMp=function ()
+        {
+            $window.location.href = $location.url()+"videoMp";
+        }
+        $scope.cancelClass = function (){
+            $window.location.href = $location.url() + "adCancelCLass";
+        }
+    });
+
+</script>
+
+
+
+
+</body>
+</html>

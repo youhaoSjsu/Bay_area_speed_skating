@@ -15,10 +15,10 @@
 <form th:action="newClassFeedback" th:userDto="${Course}">
 <h1>New class form</h1>
     <p>name</p>
-    <input name="className" type="text" th:field="*{Course.name}" class="detail"/>
+    <input name="className" type="text" th:field="*{Course.class_name}" class="detail"/>
 
     <p>max student</p>
-    <input name="maxNum" th:field="*{Course.maxStudent}" class="detail"/>
+    <input name="maxNum" th:field="*{Course.capacity}" class="detail"/>
 
     <p>time</p>
     <input name="classTime" th:field="*{Course.time}" class="detail"/>
@@ -31,22 +31,22 @@
     <input name="price"  th:field="*{Course.price}" class="detail"/>
 
     <p>length</p>
-    <input name="classCount"  th:field="*{Course.nc}" class="detail"/>
+    <input name="classCount"  th:field="*{Course.classCount}" class="detail"/>
 
     <p>start Date(YYYY-MM-DD)</p>
-    <input name="startDate"  th:field="*{Course.sTime}" class="detail"/>
+    <input name="startDate"  th:field="*{Course.startDate}" class="detail"/>
 
     <p>End Date(YYYY-MM-DD)</p>
-    <input name="endDate" th:field="*{Course.eTime}" class="detail"/>
+    <input name="endDate" th:field="*{Course.endDate}" class="detail"/>
 
     <p>instructor</p>
-    <input name="endDate" th:field="*{Course.instructor}" class="detail"/>
+    <input name="endDate" th:field="*{Course.teacher}" class="detail"/>
 
     <p>Description</p>
     <input name="description" th:field="*{Course.description}" class="detail"/>
 
     <p>Mode</p>
-    <input name="description" th:field="*{Course.mode}" class="detail"/>
+    <input name="description" th:field="*{Course.mode_of_instruction}" class="detail"/>
 
     <br></br>
     <br>

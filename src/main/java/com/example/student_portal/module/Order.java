@@ -3,7 +3,9 @@ package com.example.student_portal.module;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Order {
     String date;
@@ -13,6 +15,8 @@ public class Order {
     int orderId;
 
     double paid;
+
+    List<String> dateList;
 
     public Order(){
 

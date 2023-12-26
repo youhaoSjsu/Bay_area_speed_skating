@@ -1,5 +1,9 @@
 package com.example.student_portal.controller;
 
+import com.example.student_portal.Service.ClassService;
+import com.example.student_portal.Service.CourseService;
+import com.example.student_portal.apiModule.CancelClassRequest;
+import com.example.student_portal.apiModule.RestClassRespond;
 import com.example.student_portal.module.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -13,8 +17,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.xml.ws.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.*;
 
 import static com.example.student_portal.controller.mainCont.CurrA;
@@ -28,6 +34,14 @@ import static com.example.student_portal.controller.mainCont.CurrUser;
 public class AdminController {
     @Autowired
     public JdbcTemplate jdbcTemplate;
+
+    private CourseService courseService;
+    @Autowired
+    public AdminController(CourseService courseService)
+    {
+        this.courseService =courseService;
+    }
+
 
     //public SqlClass sqlClass = new SqlClass(jdbcTemplate);
 
@@ -46,6 +60,7 @@ public class AdminController {
         return mv;
 
     }
+
 
 
     @PostMapping("/api/enableShow")
@@ -69,8 +84,7 @@ public class AdminController {
     @PostMapping("/api/deleteClass")
     public ResponseEntity<String> deleteClass(@RequestBody int respondId)
     {
-        SqlClass sc = new SqlClass(jdbcTemplate);
-        int result = sc.deleteClass(respondId);
+        int result = courseService.deleteCourse(respondId);
         if(result ==1)
         {
 
@@ -170,6 +184,16 @@ public class AdminController {
         mv.addObject("aUser",user);
         return  mv;
     }
+    @RequestMapping(value = "/adCancelCLass", method = RequestMethod.GET)
+    public ModelAndView adCancelClass(HttpServletRequest request)
+    {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("currentA");
+        ModelAndView mv = new ModelAndView("adCancelClass.html");
+        mv.addObject("aUser",user);
+        return  mv;
+    }
+
     @RequestMapping(value = "/registrations" ,method = RequestMethod.GET)
     public ModelAndView registerHandling(HttpServletRequest request)
     {
@@ -202,12 +226,7 @@ public class AdminController {
     public String appAprove(int index)
     {
         classPersonDataRow cpdr = applicationArr[index];
-        //primary key is the combo of user_id and c_id
-        //command 1 = aprove, -1 = decline;
-//        Map<String,Integer> mCommand = new HashMap<>();
-//        mCommand.put("class_id", cpdr.getClass_id());
-//        mCommand.put("user_id", cpdr.getUser_id());
-//        mCommand.put("command", 1);
+
         SqlClass sqlClass = new SqlClass(jdbcTemplate);
         int result = sqlClass.appOperater(cpdr,1);
         if(result<1)
@@ -251,7 +270,7 @@ public class AdminController {
             User u = (User)session.getAttribute("currentA");
             mv.addObject("aUser",u);
 
-        Course[] cArr = sqlClass.loadClassIntoArray();
+        Course[] cArr = courseService.getAllCourses().toArray(new Course[0]);
 
         classPersonDataRow dr = new classPersonDataRow();
         classPersonDataRow []cpdrs = new classPersonDataRow[0];
@@ -272,7 +291,7 @@ public class AdminController {
                 dr = new classPersonDataRow(Integer.parseInt(classId), "no students found");
             }
 
-            Course[] cArr = sqlClass.loadClassIntoArray();
+            Course[] cArr = courseService.getAllCourses().toArray(new Course[0]);
             mv.addObject("classList",cArr);
             mv.addObject("cpdrs",cpdrs);
             mv.addObject("dr",dr);
@@ -300,7 +319,7 @@ public class AdminController {
         User u = (User)session.getAttribute("currentA");
         mv.addObject("aUser",u);
 
-        Course[] cArr = sqlClass.loadClassIntoArray();
+        Course[] cArr = courseService.getAllCourses().toArray(new Course[0]);
         classPersonDataRow []cpdrs = listToArray(sqlClass.getStudentsInClass(class_id));
         classPersonDataRow dr;
         if (cpdrs.length>0)
@@ -740,6 +759,71 @@ public class AdminController {
 
         return new ResponseEntity<>("failed to delete board" + b.getId(),headers,HttpStatus.OK);
 
+    }
+
+    @PostMapping("/api/formClassData")
+    public ResponseEntity<String> removeBoard(@RequestBody MutiDurations[] durations)
+    {
+        return new ResponseEntity<>("failed to delete board" ,HttpStatus.OK);
+    }
+    @PostMapping("/createCancel")
+    public ResponseEntity<String> recordCanceled(@RequestBody CancelClassRequest cr)
+    {
+        try {
+            String sqlCheck = "Select class_id from classes where class_id=(?)";
+            List<Map<String,Object>> l = jdbcTemplate.queryForList(sqlCheck,cr.getClass_id());
+            if(l.size() == 0)
+            {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error class id");
+            }
+
+
+            java.sql.Date sqlDate = new java.sql.Date(cr.getDate().getTime());
+
+            String sql = "INSERT INTO classcanceled (class_id,date,reason) VALUES (?,?,?);";
+            int result =jdbcTemplate.update(sql,cr.getClass_id(),sqlDate,cr.getReason());
+            if(result!=1)
+            {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error insert");
+
+            }
+            HttpHeaders headers =new HttpHeaders();
+
+            headers.setContentType(MediaType.TEXT_PLAIN);
+            return new ResponseEntity<>("canceled a class",headers,HttpStatus.OK);
+        }catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error");
+        }
+
+
+
+    }
+    @RequestMapping(value = "/recordCancel", method = RequestMethod.GET)
+    public ModelAndView recordCancel(HttpServletRequest request)
+    {
+
+        ModelAndView mv = new ModelAndView("cancelClassForm.html");
+        return mv;
+
+    }
+
+    @RequestMapping(value = "/ClassStateMan", method = RequestMethod.GET)
+    public ModelAndView ClassStateMan(HttpServletRequest request)
+    {
+        ModelAndView mv = new ModelAndView("ClassStateMan.html");
+        return mv;
+
+    }
+
+    @RequestMapping(value = "/stuMp",method = RequestMethod.GET)
+    public ModelAndView stuMp(HttpServletRequest request)
+    {
+        ModelAndView mv = new ModelAndView("StuMp.html");
+        HttpSession session = request.getSession();
+        User u=(User) session.getAttribute("currentA");
+        mv.addObject("aUser",u);
+        return mv;
     }
 
 

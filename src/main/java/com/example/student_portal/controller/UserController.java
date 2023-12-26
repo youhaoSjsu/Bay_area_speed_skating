@@ -1,5 +1,6 @@
 package com.example.student_portal.controller;
 
+import com.example.student_portal.Service.UserService;
 import com.example.student_portal.module.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,6 +23,9 @@ public class UserController extends mainCont {
     List<Map<String,Object>> cl;
 
     private User currStu;
+
+
+
 
     @RequestMapping(value="/registClass",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
@@ -50,9 +54,7 @@ public class UserController extends mainCont {
 
             for(int i : selectIds)
             {
-
                 s= classSql.writeAnApplication(u.getId(),i,comment);
-
                 if(!s)
                     break;;
             }
@@ -124,10 +126,10 @@ public class UserController extends mainCont {
 
             Course aCourse = new Course((Integer) m.get("class_id"), (String) m.get("teacher"), (String) m.get("location"), (String) m.get("time"), (String) m.get("class_name"), (Double) m.get("price"));
 
-            aCourse.setNc((Integer) m.get("classCount"));
+            aCourse.setClassCount((Integer) m.get("classCount"));
             if(m.get("startDate")!= null)
             {
-                aCourse.setsTime(m.get("startDate").toString());
+                aCourse.setStartDate(m.get("startDate").toString());
             }
             courseList.add(aCourse);
 
@@ -286,7 +288,6 @@ public class UserController extends mainCont {
             if (!date.equals("null"))
             {
                 ls.add(date);
-
             }
             index++;
         }
@@ -312,14 +313,6 @@ public class UserController extends mainCont {
         mv.addObject("aUser", u);
         mv.addObject("classList",convertListToArry(new SqlClass(jdbcTemplate).showtoke(u.getRoleCode(),u.getId())));
         mv.addObject("reminder", "drop form submitted, thank you");
-//        Selection session[] = new Selection()[];
-//
-//        mv.addObject("selections", session);
-
-
-
-
-
         return mv;
     }
     @RequestMapping(value = "/makeUp",method = {RequestMethod.GET,RequestMethod.POST})
@@ -338,9 +331,6 @@ public class UserController extends mainCont {
         User u = (User)session.getAttribute("currentU");
 
         ModelAndView mv = new ModelAndView("userSeetingPage.html");
-
-        //system haven't loaded the zip now
-
 
         String sql = "select* from users where users.user_id= " + Integer.toString(u.getId()) + ";";
         List<Map<String, Object>> lc = new ArrayList<>();

@@ -1,10 +1,13 @@
 package com.example.student_portal.module;
+import ch.qos.logback.core.CoreConstants;
 import com.google.gson.Gson;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.relational.core.sql.In;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -45,17 +48,17 @@ public class SqlClass {
         for(Map<String,Object> m :l)
         {
             Course c = new Course();
-            c.setC_id((Integer)m.get("class_id"));
-            c.setName(m.get("class_name").toString());
+            c.setClass_id((Integer)m.get("class_id"));
+            c.setClass_name(m.get("class_name").toString());
             c.setLocation(m.get("location").toString());
             c.setPrice((double)m.get("price"));
             c.setTime(m.get("time").toString());
             if(m.get("startDate") !=null) {
-                c.setsTime(m.get("startDate").toString());
+                c.setStartDate(m.get("startDate").toString());
             }
             c.setEnrollment((Integer) m.get("enrollment"));
 
-            c.setInstructor(m.get("teacher").toString());
+            c.setTeacher(m.get("teacher").toString());
             c.setDescription(m.get("description").toString());
             lc.add(c);
 
@@ -95,10 +98,29 @@ public class SqlClass {
         m = loadSpeClass(class_id);
         Course aCourse = new Course((Integer) m.get("class_id"),(String) m.get("username"),(String) m.get("location"),(String) m.get("time"),(String) m.get("course_name"),(Double)m.get("price"));
         //value the number of classhour;
-        aCourse.setNc((Integer) m.get("classCount"));
+        aCourse.setClassCount((Integer) m.get("classCount"));
 
         return aCourse;
 
+    }
+
+    public List<Course> userTokeClass(int user_id)
+    {  String id = String.valueOf(user_id);
+        String sql = "";
+        List<Map<String,Object>> l= new ArrayList<Map<String,Object>>();
+        sql = "select class_id, location, time,classes.startDate,classes.endDate, classes.classCount,classes.price, classes.class_name, teacher " +
+                "from classes join  " +
+                "register using(class_id) where register.user_id = " +
+                id +
+                ";";
+        l = jdbcTemplate.queryForList(sql);
+        LinkedList<Course> lc = new LinkedList<>();
+        for(Map<String,Object> m: l)
+        {
+            Course c = new Course((Integer) m.get("class_id"),(String) m.get("teacher"),(String) m.get("location"),(String) m.get("time"),(String) m.get("class_name"),(Double)m.get("price"));
+            lc.add(c);
+        }
+        return lc;
     }
 
     public List<Course> showtoke(int role,int user_id)
@@ -112,7 +134,7 @@ public class SqlClass {
 //                    "join student_portal.is using(class_id) join catalogue_courses using (course_abbreviation) join register using(class_id) where user_id = " +
 //                    id +
 //                    ";";
-            sql = "select class_id, location, classes.time,classes.startDate,classes.endDate, classes.classCount,classes.price, classes.class_name, teacher " +
+            sql = "select class_id, location, time,classes.startDate,classes.endDate, classes.classCount,classes.price, classes.class_name, teacher " +
                     "from classes join  " +
                     "register using(class_id) where register.user_id = " +
                     id +
@@ -139,35 +161,34 @@ public class SqlClass {
                 m.replace("price",0.0);
             }
             Course aCourse = new Course((Integer) m.get("class_id"),(String) m.get("teacher"),(String) m.get("location"),(String) m.get("time"),(String) m.get("class_name"),(Double)m.get("price"));
-            aCourse.setNc((Integer) m.get("classCount"));
+            aCourse.setClassCount((Integer) m.get("classCount"));
             if(m.get("startDate")!= null)
             {
-                aCourse.setsTime(m.get("startDate").toString());
+                aCourse.setStartDate(m.get("startDate").toString());
             }
-
-
 
             lc.add(aCourse);
         }
         return lc;
     }
 //write a row of application into the application table
-    public boolean writeAnApplication( int u_id, int c_id,String comment)
+    @Transactional
+    public boolean writeAnApplication( int u_id, int class_id,String comment)
     {
         boolean success = false;
         String uId = Integer.toString(u_id);
-        String cId = Integer.toString(c_id);
+        String cId = Integer.toString(class_id);
         //String rC = Integer.toString(cont);
         Date d = new Date();
         SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
 //        System.out.println(dateFormat.format(d));
         String sql = "Insert Into application (user_id,class_id, comment,registerDate,active)" +
                 "values" +
-                "("+uId+","+c_id+",'"+comment+"','"+dateFormat.format(d)+"',false);";
+                "("+uId+","+class_id+",'"+comment+"','"+dateFormat.format(d)+"',false);";
         jdbcTemplate.execute(sql);
 
         //user balance add
-        String classCheck = "Select price,classCount from classes where class_id ="+c_id+";";
+        String classCheck = "Select price,classCount from classes where class_id ="+class_id+";";
         List<Map<String,Object>> l = new ArrayList<>();
         l = jdbcTemplate.queryForList(classCheck);
         double price = (Double)l.get(0).get("price");
@@ -186,12 +207,11 @@ public class SqlClass {
         boolean success = false;
         for(int i = 0; i<lc.size();i++)
         {
-            String sql = "UPDATE register SET absent = absent+ 1 where user_id = "+Integer.toString(lc.get(i).user_id)+" and class_id ="+Integer.toString(lc.get(i).getC_id())+";";
+            String sql = "UPDATE register SET absent = absent+ 1 where user_id = "+Integer.toString(lc.get(i).user_id)+" and class_id ="+Integer.toString(lc.get(i).getClass_id())+";";
             jdbcTemplate.execute(sql);
             //String m = "+\""+lc.get(i).getMd()+"\"";
-            sql = "Insert Into absent (user_id,class_id, referDate,absentDate,comment,makeUp) values ("+Integer.toString(lc.get(i).getUser_id())+","+lc.get(i).getC_id()+",'"+lc.get(i).getsReferDate()+"','"+lc.get(i).sDateOfAbsent+"','"+lc.get(i).comment+"','"+lc.get(i).getMd()+"');";
+            sql = "Insert Into absent (user_id,class_id, referDate,absentDate,comment,makeUp) values ("+Integer.toString(lc.get(i).getUser_id())+","+lc.get(i).getClass_id()+",'"+lc.get(i).getsReferDate()+"','"+lc.get(i).sDateOfAbsent+"','"+lc.get(i).comment+"','"+lc.get(i).getMd()+"');";
             jdbcTemplate.execute(sql);
-
 
         }
 
@@ -207,10 +227,10 @@ public class SqlClass {
         boolean success = false;
         for(int i = 0;i<courses.size();i++)
         {
-            String sql = "delete from register where user_id ="+Integer.toString(user_id)+" and class_id ="+courses.get(i).getC_id()+";";
+            String sql = "delete from register where user_id ="+Integer.toString(user_id)+" and class_id ="+courses.get(i).getClass_id()+";";
             jdbcTemplate.execute(sql);
 
-           // sql = "Insert Into dropTable (user_id,class_id, dropDate, comment) values ("+Integer.toString(user_id)+","+Integer.toString(courses.get(i).getC_id())+",'"+courses.get(i).sReferDate+"','"+comment+"');";
+           // sql = "Insert Into dropTable (user_id,class_id, dropDate, comment) values ("+Integer.toString(user_id)+","+Integer.toString(courses.get(i).getClass_id())+",'"+courses.get(i).sReferDate+"','"+comment+"');";
            // jdbcTemplate.execute(sql);
 
         }
@@ -253,17 +273,43 @@ public class SqlClass {
     public int addClass(Course course)
     {
         int id = idGeneration(0);
-        course.setC_id(id);
+        course.setClass_id(id);
         int result= 0;
-        String s = ",\""+course.getName()+"\",\""+course.getLocation() + "\",\"" + course.getTime() + "\"," + course.getPrice() + "," + course.getNc() + ",\"" + course.getsTime() + "\",\"" + course.geteTime() + "\");";
+        String s = ",\""+course.getClass_name()+"\",\""+course.getLocation() + "\",\"" + course.getTime() + "\"," + course.getPrice() + "," + course.getClassCount() + ",\"" + course.getStartDate() + "\",\"" + course.getEndDate() + "\");";
         String sql ="Insert Into classes (class_id,teacher,enrollment, capacity,class_name,location,time, price, classCount,startDate,endDate) values " +
-                "("+Integer.toString(course.c_id)+","+"'"+course.getInstructor()+"',"+Integer.toString(0)+","+Integer.toString(course.getMaxStudent())+s;
-        String sql1 = "Insert Into classes (class_id,teacher,enrollment, capacity,class_name,location,time, price, classCount,startDate,endDate,description,mode_of_instruction) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        result=jdbcTemplate.update(sql1,course.getC_id(),course.getInstructor(),course.getEnrollment(),course.getMaxStudent(),course.getName(),course.getLocation(),course.getTime(),course.getPrice(),course.getNc(),course.getsTime(),course.geteTime(),course.getDescription(),course.getMode());
+                "("+Integer.toString(course.class_id)+","+"'"+course.getTeacher()+"',"+Integer.toString(0)+","+Integer.toString(course.getCapacity())+s;
+        String sql1 = "Insert Into classes (class_id,teacher,enrollment, capacity,class_name,location,time, price, classCount,startDate,endDate,description,mode_of_instruction) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+
+
+
+        result=jdbcTemplate.update(sql1,course.getClass_id(),course.getTeacher(),course.getEnrollment(),course.getCapacity(),
+                course.getClass_name(),course.getLocation(),course.getTime(),course.getPrice(),course.getClassCount(),
+                convertStringToSqlDate(course.getStartDate()),convertStringToSqlDate(course.getEndDate()),course.getDescription(),course.getMode_of_instruction());
+
+        //set status:
 
 
         return result;
 
+    }
+    public static Date convertStringToSqlDate(String dateString) {
+        // Define the expected date formats
+        String[] dateFormats = {"yyyy-MM-dd", "MM/dd/yyyy", "dd-MM-yyyy", "yyyyMMdd", "MM-dd-yyyy"};
+
+        for (String dateFormat : dateFormats) {
+            SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+            try {
+                java.util.Date utilDate = sdf.parse(dateString);
+                // Convert java.util.Date to java.sql.Date
+                return new Date(utilDate.getTime());
+            } catch (ParseException e) {
+                // If parsing fails, try the next format
+            }
+        }
+
+        // If none of the formats match, return null or throw an exception
+        // depending on your application requirements.
+        return null;
     }
     public int idGeneration(int type)
     {
@@ -511,8 +557,8 @@ public class SqlClass {
         for(Map<String ,Object> m:l)
         {
             Course c= new Course();
-            c.setC_id((Integer) m.get("class_id"));
-            c.setName(m.get("class_name").toString());
+            c.setClass_id((Integer) m.get("class_id"));
+            c.setClass_name(m.get("class_name").toString());
             c.setEnrollment((Integer) m.get("enrollment"));
             lc.add(c);
         }
@@ -627,7 +673,7 @@ public class SqlClass {
         List<Course> lc = showtoke(1, user_id);
         for(Course c : lc)
         {
-            if(c.getC_id() == class_id)
+            if(c.getClass_id() == class_id)
             {
                 return true;
             }
@@ -896,20 +942,20 @@ public class SqlClass {
         Map<String ,Object> m = l.get(0);
         Course c = new Course();
 
-        c.setC_id((Integer)m.get("class_id"));
-        c.setName(m.get("class_name").toString());
+        c.setClass_id((Integer)m.get("class_id"));
+        c.setClass_name(m.get("class_name").toString());
         c.setLocation(m.get("location").toString());
         c.setPrice((double)m.get("price"));
         c.setTime(m.get("time").toString());
         c.setDescription(m.get("description").toString());
-        c.setMode(m.get("mode_of_instruction").toString());
+        c.setMode_of_instruction(m.get("mode_of_instruction").toString());
         if(m.get("startDate") !=null) {
-            c.setsTime(m.get("startDate").toString());
+            c.setStartDate(m.get("startDate").toString());
         }
         c.setEnrollment((Integer) m.get("enrollment"));
 
-        c.setMode(m.get("mode_of_instruction").toString());
-        c.setInstructor(m.get("teacher").toString());
+        c.setMode_of_instruction(m.get("mode_of_instruction").toString());
+        c.setTeacher(m.get("teacher").toString());
         c.setDescription(m.get("description").toString());
 
         return c;
@@ -1116,6 +1162,8 @@ public class SqlClass {
         }
         return 0;
     }
+
+
 
 
 
